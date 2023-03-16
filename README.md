@@ -10,11 +10,11 @@ wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=
 
 *(But do NOT use = after any of these.)*
 ```
---file     -f	Search for a file.
---registry -r	Search for a registry value.	
---ping	   -g	Search for LIVE machines.
---free     -3	Search for machines with no active user.
---wmic	   -m	Run your WMIC your command.
+--file              -f        some-file           Search for a file.
+--registry          -r        some-reg-value      Search for a registry value.	
+--wmic              -m        some-wmic-command   Run your WMIC your command.
+--ping              -g                            Search for LIVE machines.
+--free              -3                            Search for machines with no active user.
 ```
 * For an HTML formatted output postfix this:- /format:hform
 * For a LIST output use this :- /format:list
