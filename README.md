@@ -16,8 +16,7 @@ wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=
 --ping              -g                            Search for LIVE machines.
 --free              -3                            Search for machines with no active user.
 ```
-* For an HTML formatted output postfix this:- /format:hform
-* For a LIST output use this :- /format:list
+* with ```--wmic```, For an HTML formatted output postfix this ```/format:hform``` ...or for a LIST output use this ```/format:list```
           
 ## MANDATORY - You will of course need to state a RANGE of computers to look at.
 ```
