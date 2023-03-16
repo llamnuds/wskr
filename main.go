@@ -102,7 +102,7 @@ Oviously the above ranges could be in the :-
 	* File name format:        --range=myMachines.txt
 
 v0.1 - Copyright 2023
-Author - Shaun Dunmall
+Author - Shaun Dunmall.
 
 		`)
 		os.Exit(0)
