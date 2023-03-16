@@ -47,65 +47,7 @@ func main() {
 	// Used letters - 3defgmnprsvwxy
 
 	if len(os.Args) == 1 {
-		fmt.Println(`
-wskr usage :-
-
-wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=1|0][-d=DelaySeconds][-y] -f|-r|-g|-m Some Thing To Check
-
-MANDATORY - You must have one, and only one, of these :-
-(But do NOT use = after any of these.)
---file     -f		Search for a file.
---registry -r		Search for a registry value.	
---ping	   -g		Search for LIVE machines.
---free     -3       Search for machines with no active user.
---wmic	   -m		Run your WMIC your command.
-                    For an HTML formatted output postfix this:- /format:hform
-					For a LIST output use this :- /format:list
-
-MANDATORY - You will of course need to state a RANGE of computers to look at.
---range:   -n=string[..string]    FirstMachine[.. LastMachine] (Or you could use the -p -x -s and -e options.)
---range:   -n='filename.txt'       Name of text file to read in, it should end in .txt.
-The text file must be in the same directory that WSKR.EXE is run from.
-Each line of the text file should start with a machine name, then a space; everything after the space is ignored.
-Blank lines are ignored, as are any lines starting with a space or hash symbol.
-
-OPTIONAL :-
---pad=	  -p=String 	Pad Computer name number with up to this many zeros.	Default = 000
---show=	  -w=String	Return successes(1), Failures(0).			Default = 1 i.e. Only successes (-w=10 to show all)
---delay=  -d=Integer	Seconds of Delay between machines. 			Default = 0 Seconds
---prefix= -x=String	Prefix of machine name.
---start=   -s=Integer	First machine number. 
---end=	  -e=Integer	Last machine number.
---save=   -v='String'     File name, to save in same location as EXE. Use single quotes.
---summary -y		Just give final counts.
-
-To search PC0001 through PC1234, finding machines that do NOT have "c:\data\some file.txt" use :-
-	wskr -x=PC -s=0 -e=1234 -p0000 -f c:\data\some file.txt
-	 ...equivalent to...
-	wskr --range=pc0001..pc1234 --file c:\data\some file.txt
-
-To search for a registry Value on a single computer :-
-	wskr -n=comp456 -r HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell
-
-To see various things such as :-
-   Logged in users, saving result:  wskr.exe --range=WS123 --wmic computersystem get username --save='output.txt'
-   OS version:                      wskr.exe --range=WS123 --wmic os get version
-   Installed software MSI's:        wskr.exe --range=WS123 --wmic product get name,vendor,version
-   System serial number:            wskr.exe --range=WS123 --wmic bios get serialnumber	
-   Installed printers:              wskr.exe --range=WS123 --wmic printerconfig list
-   The IP,DHCPserver, Gateway:      wskr.exe --range=WS123 --wmic nicconfig get IPAddress,dhcpserver,defaultipgateway
-   AssetTag (not the SerialNumber): wskr.exe --range=WS123 --wmic systemenclosure get SMBIOSAssetTag
-   HTML for all COMPUTERSYSTEM:     wskr.exe --range=WS123 --wmic computersystem get /format:hform --save='cs-output.html'
-
-Oviously the above ranges could be in the :-
-	* Multiple machine format: --range=SSnnn..SSmmm
-	* File name format:        --range=myMachines.txt
-
-v0.1 - Copyright 2023
-Author -- Shaun Dunmall.
-
-		`)
-		os.Exit(0)
+		printHelp()
 	} else {
 
 		// Determine arguments
@@ -159,45 +101,62 @@ Author -- Shaun Dunmall.
 					}
 				}
 
+				if v3[0] == "--help" || v3[0] == "-?" {
+					printHelp()
+				}
+
 				if v3[0] == "--start" || v3[0] == "-s" {
 					argStart, _ = strconv.Atoi(v3[1])
 				}
+
 				if v3[0] == "--end" || v3[0] == "-e" {
 					argEnd, _ = strconv.Atoi(v3[1])
 				}
+
 				if argEnd < argStart {
 					argEnd = argStart
 				}
+
 				if v3[0] == "--prefix" || v3[0] == "-x" {
 					argPrefix = v3[1]
 				}
+
 				if v3[0] == "--show" || v3[0] == "-w" {
 					argShow = v3[1]
 				}
+
 				if v3[0] == "--delay" || v3[0] == "-d" {
 					argDelay, _ = strconv.Atoi(v3[1])
 				}
+
 				if v3[0] == "--pad" || v3[0] == "-p" {
 					argPad = v3[1]
 				}
+
 				if v3[0] == "--file" || v3[0] == "-f" {
 					argAction = "File"
 				}
+
 				if v3[0] == "--registry" || v3[0] == "-r" {
 					argAction = "Registry"
 				}
+
 				if v3[0] == "--ping" || v3[0] == "-g" {
 					argAction = "Ping"
 				}
+
 				if v3[0] == "--wmic" || v3[0] == "-m" {
 					argAction = "WMIC"
 				}
+
 				if v3[0] == "--summary" || v3[0] == "-y" {
 					argSummary = true
 				}
+
 				if v3[0] == "--save" || v3[0] == "-v" {
 					argSave = v3[1]
 				}
+
 				if v3[0] == "--free" || v3[0] == "-3" {
 					argAction = "Free"
 				}
@@ -317,6 +276,70 @@ Author -- Shaun Dunmall.
 	fmt.Println("Successes :", countGood)
 	fmt.Println("Total :", countBad+countGood)
 	fmt.Println()
+}
+
+func printHelp() {
+
+	fmt.Println(`
+	wskr usage :-
+	
+	wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=1|0][-d=DelaySeconds][-y] -f|-r|-g|-m Some Thing To Check
+	
+	MANDATORY - You must have one, and only one, of these :-
+	(But do NOT use = after any of these.)
+	--file     -f		Search for a file.
+	--registry -r		Search for a registry value.	
+	--ping	   -g		Search for LIVE machines.
+	--free     -3       Search for machines with no active user.
+	--wmic	   -m		Run your WMIC your command.
+						For an HTML formatted output postfix this:- /format:hform
+						For a LIST output use this :- /format:list
+	
+	MANDATORY - You will of course need to state a RANGE of computers to look at.
+	--range:   -n=string[..string]    FirstMachine[.. LastMachine] (Or you could use the -p -x -s and -e options.)
+	--range:   -n='filename.txt'       Name of text file to read in, it should end in .txt.
+	The text file must be in the same directory that WSKR.EXE is run from.
+	Each line of the text file should start with a machine name, then a space; everything after the space is ignored.
+	Blank lines are ignored, as are any lines starting with a space or hash symbol.
+	
+	OPTIONAL :-
+	--pad=	  -p=String 	Pad Computer name number with up to this many zeros.	Default = 000
+	--show=	  -w=String	Return successes(1), Failures(0).			Default = 1 i.e. Only successes (-w=10 to show all)
+	--delay=  -d=Integer	Seconds of Delay between machines. 			Default = 0 Seconds
+	--prefix= -x=String	Prefix of machine name.
+	--start=   -s=Integer	First machine number. 
+	--end=	  -e=Integer	Last machine number.
+	--save=   -v='String'     File name, to save in same location as EXE. Use single quotes.
+	--summary -y		Just give final counts.
+	--help    -?       This help page.
+	
+	To search PC0001 through PC1234, finding machines that do NOT have "c:\data\some file.txt" use :-
+		wskr -x=PC -s=0 -e=1234 -p0000 -f c:\data\some file.txt
+		 ...equivalent to...
+		wskr --range=pc0001..pc1234 --file c:\data\some file.txt
+	
+	To search for a registry Value on a single computer :-
+		wskr -n=comp456 -r HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell
+	
+	To see various things such as :-
+	   Logged in users, saving result:  wskr.exe --range=WS123 --wmic computersystem get username --save='output.txt'
+	   OS version:                      wskr.exe --range=WS123 --wmic os get version
+	   Installed software MSI's:        wskr.exe --range=WS123 --wmic product get name,vendor,version
+	   System serial number:            wskr.exe --range=WS123 --wmic bios get serialnumber	
+	   Installed printers:              wskr.exe --range=WS123 --wmic printerconfig list
+	   The IP,DHCPserver, Gateway:      wskr.exe --range=WS123 --wmic nicconfig get IPAddress,dhcpserver,defaultipgateway
+	   AssetTag (not the SerialNumber): wskr.exe --range=WS123 --wmic systemenclosure get SMBIOSAssetTag
+	   HTML for all COMPUTERSYSTEM:     wskr.exe --range=WS123 --wmic computersystem get /format:hform --save='cs-output.html'
+	
+	Oviously the above ranges could be in the :-
+		* Multiple machine format: --range=SSnnn..SSmmm
+		* File name format:        --range=myMachines.txt
+	
+	v0.1 - Copyright 2023
+	Author -- Shaun Dunmall.
+	
+			`)
+	os.Exit(0)
 }
 
 func performAction(argDelay int, wg *sync.WaitGroup, argAction string, pc string, argItem string, argShowGood bool, argShowBad bool, argSave string) {
