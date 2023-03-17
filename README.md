@@ -1,5 +1,5 @@
 # wskr
-A simple command line program for scanning a range of machines for logged on user, some registry value, some file or folder existence, whether no user is logged on, what the machines IP settings are etc.
+A simple command line program for scanning a range of machines for logged on user, some registry value, some file or folder existence, whether no user is logged on, what the machines IP settings are etc.  No installation required, just download and run the EXE.
 
 ## wskr usage :-
 ```
