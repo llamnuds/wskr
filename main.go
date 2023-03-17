@@ -3,7 +3,7 @@ TO DO
 =====
 1) Add Open Source License to this code and a command to split it out on request.
 2) Add option to read computer list from AD.
-3)
+3) Make output file into two output files if -w=10
 */
 
 package main
