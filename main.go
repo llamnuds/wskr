@@ -554,7 +554,7 @@ func checkPing(wg *sync.WaitGroup, pc string, argShowGood bool, argShowBad bool,
 		} else {
 			countBad++
 			if argShowBad { // We want to see the failures
-				if !argSummary { // UNless we only want to see the summaries
+				if !argSummary { // Unless we only want to see the summaries
 					print(pc, "NOT-Alive")
 					maybeSaveToFile(argSave, pc, "NOT-Alive")
 				}
