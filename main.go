@@ -280,6 +280,7 @@ func main() {
 	fmt.Println()
 }
 
+// printHelp function prints some helpful text.
 func printHelp() {
 
 	fmt.Println(`
@@ -344,6 +345,8 @@ func printHelp() {
 	os.Exit(0)
 }
 
+// performAction function checks to see which single function is required
+// and executes it.
 func performAction(argDelay int, wg *sync.WaitGroup, argAction string, pc string, argItem string, argShowGood bool, argShowBad bool, argSave string) {
 
 	// Delay before next searcher launched
@@ -368,6 +371,7 @@ func performAction(argDelay int, wg *sync.WaitGroup, argAction string, pc string
 	}
 }
 
+// checkFree function checks to see if a device has no active user.
 func checkFree(wg *sync.WaitGroup, pc, argItem string, argShowGood, argShowBad bool, argSave string) {
 	defer wg.Done()
 	// Launch an EXE and keep the results
@@ -405,6 +409,8 @@ func checkFree(wg *sync.WaitGroup, pc, argItem string, argShowGood, argShowBad b
 
 }
 
+// readRangeFromFile function returns a slice of computer names
+// discarding extraneous information from the input text file.
 func readRangeFromFile(myFile string) []string {
 
 	// Slice of computer names
@@ -445,6 +451,8 @@ func readRangeFromFile(myFile string) []string {
 
 }
 
+// splitMachineName function takes an input string of characters and
+// splits it into a textual 'prefix' and and padding of zeros ('0').
 func splitMachineName(a string) (string, int, string) {
 	j := 0
 	for i := 0; i < len(a); i++ {
@@ -460,6 +468,7 @@ func splitMachineName(a string) (string, int, string) {
 	return prefix, number, pad
 }
 
+// checkWMI function performs some user requested WMI check on a remote machine
 func checkWMI(wg *sync.WaitGroup, pc string, argItem string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
 	// Launch an EXE and keep the results
@@ -483,6 +492,7 @@ func checkWMI(wg *sync.WaitGroup, pc string, argItem string, argShowGood bool, a
 	}
 }
 
+// maybeSaveToFile function saves some text to a user named file if they so wish.
 func maybeSaveToFile(filename string, pc string, data string) {
 	if filename == "" {
 		return
@@ -506,18 +516,21 @@ func maybeSaveToFile(filename string, pc string, data string) {
 	}
 }
 
+// print function will print the computer name on one line (pc)
+// then the remainder of the information (data) on further lines
+// each indented by one space.
 func print(pc string, data string) {
 	var data2 string = strings.TrimSpace(pc) + "\n"
 	for _, line := range strings.Split(data, "\n") {
 		datum := strings.TrimSpace(line)
 		if datum != "" {
-			//data2 += "# " + datum + "\n"
 			data2 += " " + datum + "\n"
 		}
 	}
 	fmt.Println(data2)
 }
 
+// checkPing function will see if a machine is alive or not.
 func checkPing(wg *sync.WaitGroup, pc string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
 	// Launch an EXE and keep the results
@@ -566,6 +579,7 @@ func checkPing(wg *sync.WaitGroup, pc string, argShowGood bool, argShowBad bool,
 	}
 }
 
+// getRegData function will attempt to get a registry value from a remote computer's registry.
 func getRegData(pc, key, value string, argShowGood bool, argShowBad bool, argSave string) {
 
 	// Launch an EXE and keep the results
@@ -597,6 +611,7 @@ func getRegData(pc, key, value string, argShowGood bool, argShowBad bool, argSav
 	}
 }
 
+// checkRegistry function will attempt to get a registry value from a remote computer's registry.
 func checkRegistry(wg *sync.WaitGroup, pc string, registry string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
 	registrySplit := strings.Split(registry, `\`)
@@ -606,6 +621,7 @@ func checkRegistry(wg *sync.WaitGroup, pc string, registry string, argShowGood b
 	getRegData(pc, regKey, regValue, argShowGood, argShowBad, argSave)
 }
 
+// checkFile function will check the existence of a file or folder on a remote machine.
 func checkFile(wg *sync.WaitGroup, pc string, file string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
 	searchForThis := "\\\\" + pc + "\\\\" + file
