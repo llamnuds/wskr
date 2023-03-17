@@ -63,7 +63,7 @@ AssetTag (not the SerialNumber): wskr.exe --range=WS123 --wmic systemenclosure g
 HTML for all COMPUTERSYSTEM:     wskr.exe --range=WS123 --wmic computersystem get /format:hform --save='cs-output.html'
 ```
 
-Oviously the above ranges could be in the  machine name range format:
+Obviously the above ranges could be in the  machine name range format:
 ```--range=SSnnn..SSmmm```
 ,or file name format:
 ```--range=myMachines.txt```	
