@@ -1,10 +1,11 @@
 /*
+
 TO DO
 =====
-1) Add Open Source License to this code and a command to split it out on request.
-2) Add option to read computer list from AD.
-3) Make output file into two output files if -w=10
-4) Prevent WMI calls from applying changes or running programs.
+1) Add option to read computer list from AD.
+2) Make output file into two output files if -w=10
+3) Prevent WMI calls from applying changes or running programs.
+
 */
 
 package main
