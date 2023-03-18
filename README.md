@@ -1,5 +1,5 @@
 # wskr
-A simple command line program for scanning a range of Windows machines for the currently logged on user, a registry value, whether a certain file or folder exists, if a machine is free (on but noo-one logged in), what the machines IP settings are etc.  No installation required, no configuration files, just download and run the EXE on your Windows machine. Scan a single machine to thousands in just a few seconds.
+A simple command line program for scanning a range of Windows machines for the currently logged on user, a registry value, whether a certain file or folder exists, if a machine is free (on but no-one logged in), what the machines IP settings are etc.  No installation required, no configuration files, just download and run the EXE on your Windows machine. Scan a single machine to thousands in just a few seconds.
 
 ## wskr usage :-
 ```
