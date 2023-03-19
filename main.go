@@ -330,7 +330,7 @@ func printHelp() {
 	   Installed software MSI's:        wskr.exe --range=WS123 --wmic product get name,vendor,version
 	   System serial number:            wskr.exe --range=WS123 --wmic bios get serialnumber	
 	   Installed printers:              wskr.exe --range=WS123 --wmic printerconfig list
-	   The IP,DHCPserver, Gateway:      wskr.exe --range=WS123 --wmic nicconfig get IPAddress,dhcpserver,defaultipgateway
+	   The some IP related stuff:       wskr.exe --range=WS123 --wmic nicconfig get ipaddress,defaultipgateway,dhcpserver,dnsdomainsuffixsearchorder
 	   AssetTag (not the SerialNumber): wskr.exe --range=WS123 --wmic systemenclosure get SMBIOSAssetTag
 	   HTML for all COMPUTERSYSTEM:     wskr.exe --range=WS123 --wmic computersystem get /format:hform --save='cs-output.html'
 	
