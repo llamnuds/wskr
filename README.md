@@ -71,6 +71,7 @@ Obviously the above ranges could be in the  machine name range format:
 
 ## TO DO
 1) When saving output to a file, split good and bad results each into their own file.
+2) Add a version number to the code.
 
 ## v0.1 - Copyright 2023
 
