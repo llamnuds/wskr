@@ -73,6 +73,13 @@ Obviously the above ranges could be in the  machine name range format:
 1) When saving output to a file, split good and bad results each into their own file.
 2) Add a version number to the code.
 
+## Dependancies :-
+1) The machine you are running this on must be running Windows.
+2) --ping is reliant on Windows PING.EXE
+3) --wmic is reliant on Windows WMIC.EXE
+4) --registry is reliant on Windows REG.EXE
+
+
 ## v0.1 - Copyright 2023
 
 Author - Shaun Dunmall
