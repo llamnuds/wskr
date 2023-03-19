@@ -1,5 +1,5 @@
 # wskr
-A simple command line program for scanning a range of machines for logged on user, some registry value, some file or folder existence, whether no user is logged on, what the machines IP settings are etc.  No installation required, no configuration files, just download and run the EXE.
+A simple command line program for scanning a range of Windows machines for the currently logged on user, a registry value, whether a certain file or folder exists, if a machine is free (on but no-one logged in), what the machines IP settings are etc.  No installation required, no configuration files, just download and run the EXE on your Windows machine. Scan a single machine to thousands in just a few seconds.
 
 ## wskr usage :-
 ```
@@ -63,7 +63,7 @@ AssetTag (not the SerialNumber): wskr.exe --range=WS123 --wmic systemenclosure g
 HTML for all COMPUTERSYSTEM:     wskr.exe --range=WS123 --wmic computersystem get /format:hform --save='cs-output.html'
 ```
 
-Oviously the above ranges could be in the  machine name range format:
+Obviously the above ranges could be in the  machine name range format:
 ```--range=SSnnn..SSmmm```
 ,or file name format:
 ```--range=myMachines.txt```	
