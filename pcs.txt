@@ -1,16 +1,17 @@
-# This is a text file that contains
-# a list of machines to be scanned.
-# 
-# Lines starting with a hash symbol
-# are ignored.
-
- As are lines starting with a space,
- and blank lines.
+# This is a example text file that contains a list of machines to be scanned.
+# Lines starting with a hash symbol are ignored.
+ As are lines starting with a space, and blank lines.
 
 WSK123 everything after the
-WSK456 space is effectively
+WSK456 space is just
 PC555 a comment.
 WSK989
 WS7651
+
 computer001
 computer001
+
+# So you can use the --save=filename.txt to save the output of one scan to a text file.
+# In that ouput file, everything except the computer names are indented by one space.
+# Which is handy because that means you can use that file as the input to another scan,
+# by using --range=filename.txt
