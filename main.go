@@ -337,7 +337,13 @@ func printHelp() {
 	Oviously the above ranges could be in the :-
 		* Multiple machine format: --range=SSnnn..SSmmm
 		* File name format:        --range=myMachines.txt
-	
+
+	Dependancies :-
+		1) The machine you are running this on must be running Windows.
+		2) --ping is reliant on Windows PING.EXE
+		3) --wmic is reliant on Windows WMIC.EXE
+		4) --registry is reliant on Windows REG.EXE
+
 	v0.1 - Copyright 2023
 	Author -- Shaun Dunmall.
 	
