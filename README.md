@@ -41,7 +41,7 @@ wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=
 
 ## EXAMPLES :-
 
-To search PC0001 through PC1234, finding machines that do NOT have ```c:\data\some file.txt``` use :-
+To search ```PC0001``` through ```PC1234```, finding machines that do NOT have ```c:\data\some file.txt``` use :-
 ```
 wskr -w=0 -x=PC -s=0 -e=1234 -p0000 -f c:\data\some file.txt
     ...equivalent to...
