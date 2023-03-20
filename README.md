@@ -69,10 +69,6 @@ Obviously the above ranges could be in the  machine name range format:
 ```--range=myMachines.txt```	
   
 
-## TO DO
-1) When saving output to a file, split good and bad results each into their own file.
-2) Add a version number to the code.
-
 ## Dependancies :-
 1) The machine you are running this on must be running Windows.
 2) --ping is reliant on Windows PING.EXE
