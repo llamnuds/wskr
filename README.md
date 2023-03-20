@@ -76,6 +76,8 @@ The above ranges could be in the machine name range format:
 3) ```--wmic``` is reliant on Windows ```WMIC.EXE```
 4) ```--registry``` is reliant on Windows ```REG.EXE```
 
+## Assumptions ##
+1) Your machine names have at least one character at the start, followed by at least one digit.
 
 ## v0.1 - Copyright 2023
 
