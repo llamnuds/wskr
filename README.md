@@ -1,5 +1,5 @@
 # WSKr
-Do you need to find who's currently logged onto all your machines?  Or perhaps what DHCP server they're using?  Or maybe what printers or software they have installed? Use this simple command line program for scanning a range of Windows machines FAST! It can look for a registry value, a file or folder, who's logged on, or indeed whether no user is logged on, machines IP settings, serial numbers etc. No installation required, no configuration files, just download and run the EXE on your Windows machine. Scan a single machine or thousands in just a few seconds.
+Do you need to find who's currently logged onto all your machines?  Or perhaps what DHCP server they're using?  Or maybe what printers or software they have installed? Use this simple command line program for scanning a range of Windows machines FAST! It can look for a registry value, a file or folder, see which machines are alive, or use WMI to do a variety of things such as who's logged on, or indeed whether NO USER is logged on, check machines IP settings, serial numbers etc. No installation required, no configuration files, just download and run the EXE on your Windows machine. Scan a single machine or thousands in just a few seconds.
 
 ## wskr usage :-
 ```
