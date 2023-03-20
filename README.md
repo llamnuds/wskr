@@ -29,14 +29,14 @@ wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=
 
 ## OPTIONAL :-
 ```
---pad=	  -p=String 	Pad Computer name number with up to this many zeros.	Default = 000
---show=	  -w=String	Return successes(1), Failures(0).			Default = 1 i.e. Only successes (-w=10 to show all)
---delay=  -d=Integer	Seconds of Delay between machines. 			Default = 0 Seconds
---prefix= -x=String	Prefix of machine name.
---start=  -s=Integer	First machine number. 
---end=	  -e=Integer	Last machine number.
---save=   -v='String'   File name, to save in same location as EXE. Use single quotes.
---summary -y		Just give final counts.
+--pad=    -p=String   Pad Computer name with up to this many zeros. Default = 000
+--show=   -w=String   Return successes(1), Failures(0).             Default = 1 i.e. Only successes (-w=10 to show all)
+--delay=  -d=Integer  Seconds of Delay between machines.            Default = 0 Seconds
+--prefix= -x=String   Prefix of machine name.
+--start=  -s=Integer  First machine number. 
+--end=    -e=Integer  Last machine number.
+--save=   -v='String' File name, to save in same location as EXE.   Use single quotes.
+--summary -y          Just give final counts.
 ```
 
 ## EXAMPLES :-
