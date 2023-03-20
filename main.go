@@ -399,7 +399,7 @@ func checkFree(wg *sync.WaitGroup, pc, argItem string, argShowGood, argShowBad b
 		if !argSummary {
 			if argShowBad {
 				print(pc, err.Error())
-				maybeSaveToFile(argSave, pc, err.Error())
+				maybeSaveToFile("0-"+argSave, pc, err.Error())
 			}
 		}
 		countBad++
@@ -407,7 +407,7 @@ func checkFree(wg *sync.WaitGroup, pc, argItem string, argShowGood, argShowBad b
 		if !argSummary {
 			if argShowGood {
 				print(pc, "is Free.")
-				maybeSaveToFile(argSave, pc, "is Free")
+				maybeSaveToFile("1-"+argSave, pc, "is Free")
 			}
 		}
 		countGood++
@@ -483,7 +483,7 @@ func checkWMI(wg *sync.WaitGroup, pc string, argItem string, argShowGood bool, a
 		if !argSummary {
 			if argShowBad {
 				print(pc, err.Error())
-				maybeSaveToFile(argSave, pc, err.Error())
+				maybeSaveToFile("0-"+argSave, pc, err.Error())
 			}
 		}
 		countBad++
@@ -491,7 +491,7 @@ func checkWMI(wg *sync.WaitGroup, pc string, argItem string, argShowGood bool, a
 		if !argSummary {
 			if argShowGood {
 				print(pc, string(out))
-				maybeSaveToFile(argSave, pc, string(out))
+				maybeSaveToFile("1-"+argSave, pc, string(out))
 			}
 		}
 		countGood++
@@ -552,7 +552,7 @@ func checkPing(wg *sync.WaitGroup, pc string, argShowGood bool, argShowBad bool,
 		if argShowBad { // We want to see the failures
 			if !argSummary { // But not if we only want to see the summary counts
 				print(pc, "NOT-Alive")
-				maybeSaveToFile(argSave, pc, "NOT-Alive")
+				maybeSaveToFile("0-"+argSave, pc, "NOT-Alive")
 			}
 		}
 	} else {
@@ -569,7 +569,7 @@ func checkPing(wg *sync.WaitGroup, pc string, argShowGood bool, argShowBad bool,
 			if !argSummary {
 				if argShowGood {
 					print(pc, "Alive")
-					maybeSaveToFile(argSave, pc, "Alive")
+					maybeSaveToFile("1-"+argSave, pc, "Alive")
 				}
 			}
 		} else {
@@ -577,7 +577,7 @@ func checkPing(wg *sync.WaitGroup, pc string, argShowGood bool, argShowBad bool,
 			if argShowBad { // We want to see the failures
 				if !argSummary { // Unless we only want to see the summaries
 					print(pc, "NOT-Alive")
-					maybeSaveToFile(argSave, pc, "NOT-Alive")
+					maybeSaveToFile("0-"+argSave, pc, "NOT-Alive")
 				}
 			}
 		}
@@ -601,7 +601,7 @@ func getRegData(pc, key, value string, argShowGood bool, argShowBad bool, argSav
 			// We want to see the failures
 			if !argSummary {
 				print(pc, buffer.String())
-				maybeSaveToFile(argSave, pc, buffer.String())
+				maybeSaveToFile("0-"+argSave, pc, buffer.String())
 			}
 		}
 	} else {
@@ -611,7 +611,7 @@ func getRegData(pc, key, value string, argShowGood bool, argShowBad bool, argSav
 			// We want to see the successes
 			if !argSummary {
 				print(pc, buffer.String())
-				maybeSaveToFile(argSave, pc, buffer.String())
+				maybeSaveToFile("1-"+argSave, pc, buffer.String())
 			}
 		}
 	}
@@ -636,7 +636,7 @@ func checkFile(wg *sync.WaitGroup, pc string, file string, argShowGood bool, arg
 		if argShowGood {
 			if !argSummary {
 				print(pc, "File Found")
-				maybeSaveToFile(argSave, pc, "File Found")
+				maybeSaveToFile("1-"+argSave, pc, "File Found")
 			}
 		}
 	} else {
@@ -644,7 +644,7 @@ func checkFile(wg *sync.WaitGroup, pc string, file string, argShowGood bool, arg
 		if argShowBad {
 			if !argSummary {
 				print(pc, strings.Replace(err.Error(), "CreateFile ", "", -1))
-				maybeSaveToFile(argSave, pc, strings.Replace(err.Error(), "CreateFile ", "", -1))
+				maybeSaveToFile("0-"+argSave, pc, strings.Replace(err.Error(), "CreateFile ", "", -1))
 			}
 		}
 	}
