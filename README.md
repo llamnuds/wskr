@@ -19,8 +19,10 @@ wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=
 * with ```--wmic```, For an HTML formatted output postfix this ```/format:hform``` ...or for a LIST output use this ```/format:list```
           
 ## MANDATORY - You will of course need to state a RANGE of computers to look at.
-```--range:   -n=string[..string]```    FirstMachine[.. LastMachine] (Or you could use the -p -x -s and -e options.)
-```--range:   -n='filename.txt'```      Name of text file to read in, it should end in .txt.
+```
+--range:   -n=string[..string]    FirstMachine[.. LastMachine] (Or you could use the -p -x -s and -e options.)
+--range:   -n='filename.txt'      Name of text file to read in, it should end in .txt.
+```
 
 * The text file must be in the same directory that WSKR.EXE is run from.
 * Each line of the text file should start with a machine name, then a space; everything after the space is ignored.
