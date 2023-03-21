@@ -39,6 +39,7 @@ wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=
 --save=   -v='String' File name, to save in same location as EXE.   Use single quotes.
 --summary -y          Just give final counts.
 ```
+If saving the results to a file, successes are saved to the file that you specified but prefixed with a "1-", and the failure file is pre-fixed with "0-".
 
 ## EXAMPLES :-
 
