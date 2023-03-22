@@ -39,8 +39,8 @@ wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=
           
 ## SECOND MANDATORY PARAMETER - You will of course need to state a RANGE of computers to look at.
 ```
---range:   -n=string[..string]    FirstMachine[.. LastMachine] (Or you could use the -p -x -s and -e options.)
---range:   -n='filename.txt'      Name of text file to read in, it should end in .txt.
+--range=   -n=string[..string]    FirstMachine[.. LastMachine] (Or you could use the -p -x -s and -e options.)
+--range=   -n='filename.txt'      Name of text file to read in, it should end in .txt.
 ```
 
 * The text file must be in the same directory that WSKR.EXE is run from.
