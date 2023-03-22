@@ -313,8 +313,6 @@ func printHelp() {
 	--help    -?       This help page.
 	
 	To search PC0001 through PC1234, finding machines that do NOT have "c:\data\some file.txt" use :-
-		wskr -w=0 -x=PC -s=0 -e=1234 -p0000 -f c:\data\some file.txt
-		 ...equivalent to...
 		wskr --show=0 --range=pc0001..pc1234 --file c:\data\some file.txt
 	
 	To search for a registry Value on a single computer :-
