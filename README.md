@@ -24,7 +24,7 @@ Do you manage hundreds or thousands of machines?  Then this simple tool could be
 ## GETTING STARTED
 To get started, download the WSKr.exe file from the Github repository and run it on your Windows machine. You can then use the following command-line options to run a scan:
 ```
-wskr -n=ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=1|0][-d=DelaySeconds][-y] -f|-r|-g|-m Some Thing To Check
+wskr -n=ABC123..ABC999 [-w=1|0][-d=DelaySeconds][-y] -f|-r|-g|-m Some Thing To Check
 ```
 
 
@@ -45,7 +45,7 @@ You must have one, and only one, of these.
 ## SECOND MANDATORY PARAMETER
 You will need to state a RANGE of computers to look at.
 ```
---range=   -n=string[..string]    FirstMachine[.. LastMachine] (Or you could use the -p -x -s and -e options.)
+--range=   -n=string[..string]    FirstMachine[.. LastMachine]
 --range=   -n='filename.txt'      Name of text file to read in, it should end in .txt.
 ```
 
@@ -56,12 +56,8 @@ You will need to state a RANGE of computers to look at.
 
 ## OPTIONAL PARAMETERS
 ```
---pad=    -p=String   Pad Computer name with up to this many zeros. Default = 000
 --show=   -w=String   Return successes(1), Failures(0).             Default = 1 i.e. Only successes (-w=10 to show all)
 --delay=  -d=Integer  Seconds of Delay between machines.            Default = 0 Seconds
---prefix= -x=String   Prefix of machine name.
---start=  -s=Integer  First machine number. 
---end=    -e=Integer  Last machine number.
 --save=   -v='String' File name, to save in same location as EXE.   Use single quotes.
 --summary -y          Just give final counts.
 ```
@@ -78,8 +74,6 @@ Successes are saved to the file that you specified but prefixed with a "1-", and
 
 To search ```PC0001``` through ```PC1234```, finding machines that do NOT have ```c:\data\some file.txt``` use :-
 ```
-wskr -w=0 -x=PC -s=0 -e=1234 -p0000 -f c:\data\some file.txt
-    ...equivalent to...
 wskr --show=0 --range=pc0001..pc1234 --file c:\data\some file.txt
 ```	
 To search for a REGISTRY Value on a single computer :-
