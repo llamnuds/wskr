@@ -500,7 +500,7 @@ func checkWMI(wg *sync.WaitGroup, pc string, argItem string, argShowGood bool, a
 
 // maybeSaveToFile function saves some text to a user named file if they so wish.
 func maybeSaveToFile(filename string, pc string, data string) {
-	if filename == "" {
+	if len(filename) < 3 {
 		return
 	}
 	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
