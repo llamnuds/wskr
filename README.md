@@ -62,6 +62,11 @@ wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=
 ```
 If saving the results to a file, successes are saved to the file that you specified but prefixed with a "1-", and the failure file is pre-fixed with "0-".
 
+## SAVING THE RESULTS
+You can save the results of your scan to a file using the following option:
+```--save=``` or ```-v=``` followed by the filename to save to. The file will be saved to the same location as EXE.
+Successes are saved to the file that you specified but prefixed with a "1-", and the failure file is prefixed with "0-".
+
 ## EXAMPLES :-
 
 To search ```PC0001``` through ```PC1234```, finding machines that do NOT have ```c:\data\some file.txt``` use :-
