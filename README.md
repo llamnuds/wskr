@@ -1,6 +1,7 @@
 # WSKr
 Do you manage hundreds or thousands of machines?  Then this simple tool could be of use to you.  Just download and run the EXE on your Windows machine. Scan a single machine or thousands in just a few seconds.
 
+
 ## FEATURES
 * Scan a range of Windows machines quickly.
 * Look for a registry value.
@@ -19,13 +20,16 @@ Do you manage hundreds or thousands of machines?  Then this simple tool could be
 * No installation required.
 * No configuration files.
 
+
 ## GETTING STARTED
 To get started, download the WSKr.exe file from the Github repository and run it on your Windows machine. You can then use the following command-line options to run a scan:
 ```
 wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=1|0][-d=DelaySeconds][-y] -f|-r|-g|-m Some Thing To Check
 ```
 
-## FIRST MANDATORY PARAMETER - You must have one, and only one, of these
+
+## FIRST MANDATORY PARAMETER
+You must have one, and only one, of these.
 
 *(But do NOT use = after any of these.)*
 ```
@@ -37,7 +41,9 @@ wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=
 ```
 * with ```--wmic```, For an HTML formatted output postfix this ```/format:hform``` ...or for a LIST output use this ```/format:list```
           
-## SECOND MANDATORY PARAMETER - You will of course need to state a RANGE of computers to look at.
+          
+## SECOND MANDATORY PARAMETER
+You will need to state a RANGE of computers to look at.
 ```
 --range=   -n=string[..string]    FirstMachine[.. LastMachine] (Or you could use the -p -x -s and -e options.)
 --range=   -n='filename.txt'      Name of text file to read in, it should end in .txt.
@@ -46,6 +52,7 @@ wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=
 * The text file must be in the same directory that WSKR.EXE is run from.
 * Each line of the text file should start with a machine name, then a space; everything after the space is ignored.
 * Blank lines are ignored, as are any lines starting with a space or hash symbol.
+
 
 ## OPTIONAL PARAMETERS
 ```
@@ -60,10 +67,12 @@ wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=
 ```
 If saving the results to a file, successes are saved to the file that you specified but prefixed with a "1-", and the failure file is pre-fixed with "0-".
 
+
 ## SAVING THE RESULTS
 You can save the results of your scan to a file using the following option:
 ```--save=``` or ```-v=``` followed by the filename to save to. The file will be saved to the same location as EXE.
 Successes are saved to the file that you specified but prefixed with a "1-", and the failure file is prefixed with "0-".
+
 
 ## EXAMPLES
 
