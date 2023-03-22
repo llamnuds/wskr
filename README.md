@@ -19,6 +19,9 @@ Do you manage hundreds or thousands of machines?  Then this simple tool could be
 * No installation required.
 * No configuration files.
 
+## Getting Started
+To get started, download the WSKr.exe file from the Github repository and run it on your Windows machine. You can then use the following command-line options to run a scan:
+
 ## wskr usage :-
 ```
 wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=1|0][-d=DelaySeconds][-y] -f|-r|-g|-m Some Thing To Check
