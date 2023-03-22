@@ -286,7 +286,7 @@ func printHelp() {
 	fmt.Println(`
 	wskr usage :-
 	
-	wskr -n:ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=1|0][-d=DelaySeconds][-y] -f|-r|-g|-m Some Thing To Check
+	wskr -n=ABC123..ABC999 [-s=start][-e=end][-p=PaddingString][-x=PrefixString][-w=1|0][-d=DelaySeconds][-y] -f|-r|-g|-m Some Thing To Check
 	
 	MANDATORY - You must have one, and only one, of these :-
 	(But do NOT use = after any of these.)
@@ -299,8 +299,8 @@ func printHelp() {
 						For a LIST output use this :- /format:list
 	
 	MANDATORY - You will of course need to state a RANGE of computers to look at.
-	--range:   -n=string[..string]    FirstMachine[.. LastMachine] (Or you could use the -p -x -s and -e options.)
-	--range:   -n='filename.txt'       Name of text file to read in, it should end in .txt.
+	--range=   -n=string[..string]    FirstMachine[.. LastMachine] (Or you could use the -p -x -s and -e options.)
+	--range=   -n='filename.txt'       Name of text file to read in, it should end in .txt.
 	The text file must be in the same directory that WSKR.EXE is run from.
 	Each line of the text file should start with a machine name, then a space; everything after the space is ignored.
 	Blank lines are ignored, as are any lines starting with a space or hash symbol.
