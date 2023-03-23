@@ -22,13 +22,16 @@ Do you manage hundreds or thousands of machines?  Then this simple tool could be
 
 
 ## GETTING STARTED
-To get started, download the WSKr.exe file from the Github repository and run it on your Windows machine. You can then use the following command-line options to run a scan:
+To get started, download the WSKr.exe file from the Github repository and run it on your Windows machine.
+For example, if you have a thousand machines, named WS000 through WS999,
+then you can then use the following command to run a simple Ping scan on them all.
+You'll know Which are on in just a few seconds :-
 ```
-wskr -n=ABC123..ABC999 [-w=1|0][-d=DelaySeconds][-y] -f|-r|-g|-m Some Thing To Check
+wskr --range=WS000..WS999  --ping
 ```
 
 
-## FIRST MANDATORY PARAMETER
+## MANDATORY PARAMETER - What to do.
 You must have one, and only one, of these.
 
 *(But do NOT use = after any of these.)*
@@ -42,7 +45,7 @@ You must have one, and only one, of these.
 * with ```--wmic```, For an HTML formatted output postfix this ```/format:hform``` ...or for a LIST output use this ```/format:list```
           
           
-## SECOND MANDATORY PARAMETER
+## MANDATORY PARAMETER - where to do it.
 You will need to state a RANGE of computers to look at.
 ```
 --range=   -n=string[..string]    FirstMachine[.. LastMachine]
