@@ -63,13 +63,13 @@ You will need to state a RANGE of computers to look at.
 --save=   -v='String' File name, to save in same location as EXE.   Use single quotes.
 --summary -y          Just give final counts.
 ```
-If saving the results to a file, successes are saved to the file that you specified but prefixed with a "1-", and the failure file is pre-fixed with "0-".
+If saving the results to a file, successes are saved to the file that you specified but prefixed with a ```1-```, and the failure file is pre-fixed with ```0-```.
 
 
 ## SAVING THE RESULTS
 You can save the results of your scan to a file using the following option:
 ```--save=``` or ```-v=``` followed by the filename to save to. The file will be saved to the same location as EXE.
-Successes are saved to the file that you specified but prefixed with a "1-", and the failure file is prefixed with "0-".
+Successes are saved to the file that you specified but prefixed with a ```1-```, and the failure file is prefixed with ```0-```.
 
 
 ## EXAMPLES
