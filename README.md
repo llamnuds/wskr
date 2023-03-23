@@ -83,7 +83,7 @@ To search for a REGISTRY Value on a single computer :-
 ```
 wskr -n=comp456 -r HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell
 ```	
-To see various things such as :-
+WMIC is useful to see a whole bunch of different things, such as :-
 ```
 Logged in users, saving result:  wskr.exe --range=WS123 --wmic computersystem get username --save='output.txt'
 OS version:                      wskr.exe --range=WS123 --wmic os get version
