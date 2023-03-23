@@ -3,22 +3,22 @@ Do you manage hundreds or thousands of machines?  Then this simple tool could be
 
 
 ## FEATURES
-* Scan a range of Windows machines quickly.
-* Look for a registry value.
-* Look for the presence or absence of a file or folder.
-* See which machines are alive, or not.
-* Use WMI to check mchines ...
-  * IP address.
-  * DHCP or DNS settings.
-  * See who is logged on.
-  * Find machines with no-one logged on.
-  * Installed software or patches.
-  * Serial or Asset Tag numbers.
-  * Installed printers.
-  * OS version.
+* Scan a range of Windows machines quickly
+* Look for a registry value
+* Look for the presence or absence of a file or folder
+* See which machines are alive, or not
+* Use WMI to find machines ...
+  * IP address
+  * DHCP or DNS settings
+  * See who is logged on
+  * Find machines with no-one logged on
+  * Installed software or patches
+  * Serial or Asset Tag numbers
+  * Installed printers
+  * OS version
   * ...and more...
-* No installation required.
-* No configuration files.
+* No installation required
+* No configuration files
 
 
 ## GETTING STARTED
