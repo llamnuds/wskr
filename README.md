@@ -63,7 +63,6 @@ You will need to state a RANGE of computers to look at.
 --save=   -v='String' File name, to save in same location as EXE.   Use single quotes.
 --summary -y          Just give final counts.
 ```
-If saving the results to a file, successes are saved to the file that you specified but prefixed with a ```1-```, and the failure file is pre-fixed with ```0-```.
 
 
 ## SAVING THE RESULTS
