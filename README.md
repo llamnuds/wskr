@@ -47,8 +47,8 @@ You must have one, and only one, of these.
 ## MANDATORY PARAMETER - Tell WSKr on which machines to do it.
 You will need to state a RANGE of computers to look at.
 ```
---range= | -n=string[..string]    FirstMachine[.. LastMachine]
---range= | -n='filename.txt'      Name of text file to read in, it should end in .txt.
+--range= | -n=   string[..string]    FirstMachine[.. LastMachine]
+--range= | -n=   'filename.txt'      Name of text file to read in, it should end in .txt.
 ```
 
 * The text file must be in the same directory that WSKR.EXE is run from.
@@ -58,10 +58,10 @@ You will need to state a RANGE of computers to look at.
 
 ## OPTIONAL PARAMETERS
 ```
---show= | -w=String    Return successes(1), Failures(0).             Default = 1 i.e. Only successes (-w=10 to show all)
---delay= | -d=Integer  Seconds of Delay between machines.            Default = 0 Seconds
---save= | -v='String'  File name, to save in same location as EXE.   Use single quotes.
---summary | -y         Just give final counts.
+--show= | -w=     String    Return successes(1), Failures(0).             Default = 1 i.e. Only successes (-w=10 to show all)
+--delay= | -d=    Integer   Seconds of Delay between machines.            Default = 0 Seconds
+--save= | -v=     'String'  File name, to save in same location as EXE.   Use single quotes.
+--summary | -y              Just give final counts.
 ```
 
 
