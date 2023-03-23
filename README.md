@@ -74,6 +74,8 @@ Successes are saved to the file that you specified but prefixed with a ```1-```,
 ## EXAMPLES
 
 To search ```PC0001``` through ```PC1234```, finding machines that do NOT have ```c:\data\some file.txt``` use :-
+
+*(Note the --show=0, to see the failures.)*
 ```
 wskr --show=0 --range=pc0001..pc1234 --file c:\data\some file.txt
 ```	
