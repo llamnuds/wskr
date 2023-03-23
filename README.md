@@ -35,11 +35,11 @@ wskr --range=WS000..WS999  --ping
 You must have one, and only one, of these.
 *(But do NOT use = after any of these.)*
 ```
---file | -f     some-file           Search for a file.
---registry | -r some-reg-value      Search for a registry value.	
---wmic | -m     some-wmic-command   Run your WMIC your command.
---ping | -g                         Search for LIVE machines.
---free | -3                         Search for machines with no active user.
+--file|-f      some-file           Search for a file.
+--registry|-r  some-reg-value      Search for a registry value.	
+--wmic|-m      some-wmic-command   Run your WMIC your command.
+--ping|-g                          Search for LIVE machines.
+--free|-3                          Search for machines with no active user.
 ```
 * With ```--wmic```, For an HTML formatted output postfix this ```/format:hform``` ...or for a LIST output use this ```/format:list```
           
@@ -47,8 +47,8 @@ You must have one, and only one, of these.
 ## MANDATORY PARAMETER - Tell WSKr on which machines to do it.
 You will need to state a RANGE of computers to look at.
 ```
---range= | -n=   string[..string]    FirstMachine[.. LastMachine]
---range= | -n=   'filename.txt'      Name of text file to read in, it should end in .txt.
+--range=|-n=   string[..string]    FirstMachine[.. LastMachine]
+--range=|-n=   'filename.txt'      Name of text file to read in, it should end in .txt.
 ```
 
 * The text file must be in the same directory that WSKR.EXE is run from.
