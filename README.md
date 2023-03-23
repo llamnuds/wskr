@@ -23,7 +23,7 @@ Do you manage hundreds or thousands of machines?  Then this simple tool could be
 
 ## GETTING STARTED
 To get started, download the WSKr.exe file from the Github repository and run it on your Windows machine.
-For example, if you have a thousand machines, named WS000 through WS999,
+For example, if you have a thousand machines, named ```WS000``` through ```WS999```,
 then you can then use the following command to run a simple Ping scan on them all.
 You'll know which are on in just a few seconds :-
 ```
