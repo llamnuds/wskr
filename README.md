@@ -108,6 +108,7 @@ The above ranges could be in the machine name range format:
 
 ## ASSUMPTIONS
 1) Your machine names have at least one character at the start, followed by at least one digit.
+2) The machines you are scanning are running Windows.
 
 ## v0.1 - Copyright 2023
 
