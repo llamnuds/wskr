@@ -41,7 +41,7 @@ You must have one, and only one, of these.
 --ping              -g                            Search for LIVE machines.
 --free              -3                            Search for machines with no active user.
 ```
-* with ```--wmic```, For an HTML formatted output postfix this ```/format:hform``` ...or for a LIST output use this ```/format:list```
+* With ```--wmic```, For an HTML formatted output postfix this ```/format:hform``` ...or for a LIST output use this ```/format:list```
           
           
 ## MANDATORY PARAMETER - Where to do it...
