@@ -44,7 +44,7 @@ You must have one, and only one, of these.
 * With ```--wmic```, For an HTML formatted output postfix this ```/format:hform``` ...or for a LIST output use this ```/format:list```
           
           
-## MANDATORY PARAMETER - Tell WSKr on which machines to do it.
+## MANDATORY PARAMETER - Tell WSKr on which machines to operate.
 You will need to state a RANGE of computers to look at.
 ```
 --range=|-n=   string[..string]    FirstMachine[.. LastMachine]
