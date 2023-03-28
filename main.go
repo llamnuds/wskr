@@ -290,27 +290,27 @@ func printHelp() {
 	
 	MANDATORY - You must have one, and only one, of these :-
 	(But do NOT use = after any of these.)
-	--file     -f		Search for a file.
-	--registry -r		Search for a registry value.	
-	--ping	   -g		Search for LIVE machines.
-	--free     -3       Search for machines with no active user.
-	--wmic	   -m		Run your WMIC your command.
-						For an HTML formatted output postfix this:- /format:hform
-						For a LIST output use this :- /format:list
+	--file|-f		Search for a file.
+	--registry|-r	Search for a registry value.	
+	--ping|-g		Search for LIVE machines.
+	--free|-3       Search for machines with no active user.
+	--wmic|-m		Run your WMIC your command.
+					For an HTML formatted output postfix this:- /format:hform
+					For a LIST output use this :- /format:list
 	
 	MANDATORY - You will of course need to state a RANGE of computers to look at.
-	--range=   -n=string[..string]    FirstMachine[.. LastMachine]
-	--range=   -n='filename.txt'       Name of text file to read in, it should end in .txt.
-	The text file must be in the same directory that WSKR.EXE is run from.
-	Each line of the text file should start with a machine name, then a space; everything after the space is ignored.
-	Blank lines are ignored, as are any lines starting with a space or hash symbol.
+	--range=|-n=   string[..string]    FirstMachine[.. LastMachine]
+	--range=|-n=   'filename.txt'       Name of text file to read in, it should end in .txt.
+					The text file must be in the same directory that WSKR.EXE is run from.
+					Each line of the text file should start with a machine name, then a space; everything after the space is ignored.
+					Blank lines are ignored, as are any lines starting with a space or hash symbol.
 	
 	OPTIONAL :-
-	--show=	  -w=String	Return successes(1), Failures(0).			Default = 1 i.e. Only successes (-w=10 to show all)
-	--delay=  -d=Integer	Seconds of Delay between machines. 			Default = 0 Seconds
-	--save=   -v='String'     File name, to save in same location as EXE. Use single quotes.
-	--summary -y		Just give final counts.
-	--help    -?       This help page.
+	[--show=|-w=]  String		1,Return successes, 0,Failures.		(-w=10 to show all)
+	[--delay=|-d=] Integer		Seconds of Delay between machines.
+	[--save=|-v=]  'String'     File name, to save in same location as EXE. Use single quotes.
+	[--summary|-y]      		Just give final counts.
+	[--help|-?]                 This help page.
 	
 	To search PC0001 through PC1234, finding machines that do NOT have "c:\data\some file.txt" use :-
 		wskr --show=0 --range=pc0001..pc1234 --file c:\data\some file.txt
@@ -337,6 +337,9 @@ func printHelp() {
 		2) --ping is reliant on Windows PING.EXE
 		3) --wmic is reliant on Windows WMIC.EXE
 		4) --registry is reliant on Windows REG.EXE
+		5) You have admin rights on the remote machines.
+		6) Ensure that WMI service is enabled and running on the remote machines.
+		7) Ensure any required firewall ports are open between your machine and the remote machines.
 
 	v0.1 - Copyright 2023
 	Author -- Shaun Dunmall.
