@@ -106,13 +106,14 @@ The above ranges could be in the machine name range format:
 2) ```--ping``` is reliant on Windows ```PING.EXE```
 3) ```--wmic``` is reliant on Windows ```WMIC.EXE```
 4) ```--registry``` is reliant on Windows ```REG.EXE```
-5) You have admin rights on the remote machines.
-6) Ensure that WMI service is enabled and running on the remote machines.
-7) Ensure any required firewall ports are open between your machine and the remote machines.
+
 
 ## ASSUMPTIONS
 1) Your machine names have at least one character at the start, followed by at least one digit.
 2) The machines you are scanning are running Windows.
+3) You have admin rights on the remote machines.
+4) Ensure that WMI service is enabled and running on the remote machines.
+5) Ensure any required firewall ports are open between your machine and the remote machines.
 
 ## v0.1 - Copyright 2023
 
