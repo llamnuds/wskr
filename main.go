@@ -3,8 +3,8 @@
 TO DO
 =====
 1) Add option to read computer list from AD.
-2) Make output file into two output files if -w=10
-3) Prevent WMI calls from applying changes or running programs.
+2) Prevent WMI calls from applying changes or running programs.
+3) Time the run and display the result.
 
 */
 
