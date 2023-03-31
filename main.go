@@ -5,6 +5,7 @@ TO DO
 1) Add option to read computer list from AD.
 2) Prevent WMI calls from applying changes or running programs.
 3) Time the run and display the result.
+4) Add ability to search through USER folders : --USERFILE
 
 */
 
@@ -295,32 +296,32 @@ func printHelp() {
 	--ping|-g		Search for LIVE machines.
 	--free|-3		Search for machines with no active user.
 	--wmic|-m		Run your WMIC your command.
-	                For an HTML formatted output postfix this:- /format:hform
-	                For a LIST output use this :- /format:list
+					For an HTML formatted output postfix this:- /format:hform
+					For a LIST output use this :- /format:list
 	
 	MANDATORY - You will of course need to state a RANGE of computers to look at.
-	--range=|-n=   string[..string]    FirstMachine[.. LastMachine]
-	--range=|-n=   'filename.txt'       Name of text file to read in, it should end in .txt.
+	--range=|-n=	string[..string]    FirstMachine[.. LastMachine]
+	--range=|-n=	'filename.txt'       Name of text file to read in, it should end in .txt.
 					The text file must be in the same directory that WSKR.EXE is run from.
-	                Each line of the text file should start with a machine name, then a space; everything after the space is ignored.
-	                Blank lines are ignored, as are any lines starting with a space or hash symbol.
+					Each line of the text file should start with a machine name, then a space; everything after the space is ignored.
+					Blank lines are ignored, as are any lines starting with a space or hash symbol.
 	
 	OPTIONAL :-
-	[--show=|-w=]  String		1,Return successes, 0,Failures.		(-w=10 to show all) *Note.
-	[--delay=|-d=] Integer		Seconds of Delay between machines.
-	[--save=|-v=]  'String'     File name, to save in same location as EXE. Use single quotes.
-	[--summary|-y]      		Just give final counts.
-	[--help|-?]                 This help page.
+	[--show=|-w=]	String		1,Return successes, 0,Failures.		(-w=10 to show all) *Note.
+	[--delay=|-d=]	Integer		Seconds of Delay between machines.
+	[--save=|-v=]	'String'	File name, to save in same location as EXE. Use single quotes.
+	[--summary|-y]				Just give final counts.
+	[--help|-?]					This help page.
 
 	*Note :- Finding something may be more meaningful that NOT being able to find something.
-	         Because you may be prevented from finding things for multiple reasons,
-			 e.g. rights, firewalls, remote services off etc.
+				Because you may be prevented from finding things for multiple reasons,
+				e.g. rights, firewalls, remote services off etc.
 	
 	To search PC0001 through PC1234, finding machines that do NOT have "c:\data\some file.txt" use :-
-		wskr --show=0 --range=pc0001..pc1234 --file c:\data\some file.txt
+				wskr --show=0 --range=pc0001..pc1234 --file c:\data\some file.txt
 	
 	To search for a registry Value on a single computer :-
-		wskr -n=comp456 -r HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell
+				wskr -n=comp456 -r HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell
 	
 	To see various things such as :-
 	   Logged in users, saving result:  wskr.exe --range=WS123 --wmic computersystem get username --save='output.txt'
