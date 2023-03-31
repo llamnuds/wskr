@@ -345,6 +345,9 @@ func printHelp() {
 		4) Ensure that WMI service is enabled and running on the remote machines.
 		5) Ensure any required firewall ports are open between your machine and the remote machines.
 
+	Note :- Finding something may be more meaningful that NOT being able to find something.
+	        Because you may be prevented from finding things for multiple reasons, e.g. rights, firewalls, remote services off etc.
+
 	v0.1 - Copyright 2023
 	Author -- Shaun Dunmall.
 	
