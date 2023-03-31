@@ -306,11 +306,15 @@ func printHelp() {
 					Blank lines are ignored, as are any lines starting with a space or hash symbol.
 	
 	OPTIONAL :-
-	[--show=|-w=]  String		1,Return successes, 0,Failures.		(-w=10 to show all)
+	[--show=|-w=]  String		1,Return successes, 0,Failures.		(-w=10 to show all) *Note.
 	[--delay=|-d=] Integer		Seconds of Delay between machines.
 	[--save=|-v=]  'String'     File name, to save in same location as EXE. Use single quotes.
 	[--summary|-y]      		Just give final counts.
 	[--help|-?]                 This help page.
+
+	*Note :- Finding something may be more meaningful that NOT being able to find something.
+	         Because you may be prevented from finding things for multiple reasons,
+			 e.g. rights, firewalls, remote services off etc.
 	
 	To search PC0001 through PC1234, finding machines that do NOT have "c:\data\some file.txt" use :-
 		wskr --show=0 --range=pc0001..pc1234 --file c:\data\some file.txt
@@ -344,9 +348,6 @@ func printHelp() {
 		3) You have admin rights on the remote machines.
 		4) Ensure that WMI service is enabled and running on the remote machines.
 		5) Ensure any required firewall ports are open between your machine and the remote machines.
-
-	Note :- Finding something may be more meaningful that NOT being able to find something.
-	        Because you may be prevented from finding things for multiple reasons, e.g. rights, firewalls, remote services off etc.
 
 	v0.1 - Copyright 2023
 	Author -- Shaun Dunmall.
