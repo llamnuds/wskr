@@ -293,17 +293,17 @@ func printHelp() {
 	--file|-f		Search for a file.
 	--registry|-r	Search for a registry value.	
 	--ping|-g		Search for LIVE machines.
-	--free|-3       Search for machines with no active user.
+	--free|-3		Search for machines with no active user.
 	--wmic|-m		Run your WMIC your command.
-					For an HTML formatted output postfix this:- /format:hform
-					For a LIST output use this :- /format:list
+	                For an HTML formatted output postfix this:- /format:hform
+	                For a LIST output use this :- /format:list
 	
 	MANDATORY - You will of course need to state a RANGE of computers to look at.
 	--range=|-n=   string[..string]    FirstMachine[.. LastMachine]
 	--range=|-n=   'filename.txt'       Name of text file to read in, it should end in .txt.
 					The text file must be in the same directory that WSKR.EXE is run from.
-					Each line of the text file should start with a machine name, then a space; everything after the space is ignored.
-					Blank lines are ignored, as are any lines starting with a space or hash symbol.
+	                Each line of the text file should start with a machine name, then a space; everything after the space is ignored.
+	                Blank lines are ignored, as are any lines starting with a space or hash symbol.
 	
 	OPTIONAL :-
 	[--show=|-w=]  String		1,Return successes, 0,Failures.		(-w=10 to show all) *Note.
