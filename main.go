@@ -15,6 +15,7 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -47,7 +48,7 @@ func main() {
 	var argItem string = ""
 	var argSave string = ""
 
-	// Used letters - 3defgmnprsvwxy
+	// Used letters - 3defgmnprsuvwxy
 
 	if len(os.Args) == 1 {
 		printHelp()
@@ -140,6 +141,10 @@ func main() {
 					argAction = "File"
 				}
 
+				if v3[0] == "--userfile" || v3[0] == "-u" {
+					argAction = "UserFile"
+				}
+
 				if v3[0] == "--registry" || v3[0] == "-r" {
 					argAction = "Registry"
 				}
@@ -221,6 +226,10 @@ func main() {
 	if argAction == "File" {
 		fmt.Print("Will look for this ", strings.ReplaceAll(argItem, "\\\\", "\\"))
 		fmt.Println(" FILE/FOLDER")
+	}
+	if argAction == "UserFile" {
+		fmt.Print("Will look for this ", strings.ReplaceAll(argItem, "\\\\", "\\"))
+		fmt.Println(" USER FILE/FOLDER")
 	}
 	if argAction == "WMIC" {
 		fmt.Println("Will run WMIC against the machines.")
@@ -369,6 +378,9 @@ func performAction(argDelay int, wg *sync.WaitGroup, argAction string, pc string
 	if argAction == "File" {
 		go checkFile(wg, pc, argItem, argShowGood, argShowBad, argSave)
 	}
+	if argAction == "UserFile" {
+		go checkUserFile(wg, pc, argItem, argShowGood, argShowBad, argSave)
+	}
 	if argAction == "Registry" {
 		go checkRegistry(wg, pc, argItem, argShowGood, argShowBad, argSave)
 	}
@@ -484,7 +496,11 @@ func splitMachineName(a string) (string, int, string) {
 func checkWMI(wg *sync.WaitGroup, pc string, argItem string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
 	// Launch an EXE and keep the results
+	//out, err := exec.Command("cmd", "/c", "wmic /node:"+pc+" "+argItem).Output()
 	out, err := exec.Command("cmd", "/c", "wmic /node:"+pc+" "+argItem).Output()
+	//fmt.Println("==> cmd.exe", " /c wmic /node:"+pc+" "+argItem)
+	//fmt.Println("==> out=", out)
+	//fmt.Println("==> err=", err.Error())
 	if err != nil {
 		if !argSummary {
 			if argShowBad {
@@ -519,7 +535,6 @@ func maybeSaveToFile(filename string, pc string, data string) {
 	for _, line := range strings.Split(data, "\n") {
 		datum := strings.TrimSpace(line)
 		if datum != "" {
-			//data2 += "# " + datum + "\n"
 			data2 += " " + datum + "\n"
 		}
 	}
@@ -636,13 +651,14 @@ func checkRegistry(wg *sync.WaitGroup, pc string, registry string, argShowGood b
 // checkFile function will check the existence of a file or folder on a remote machine.
 func checkFile(wg *sync.WaitGroup, pc string, file string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
-	searchForThis := "\\\\" + pc + "\\\\" + file
-	if _, err := os.Stat(searchForThis); err == nil {
+	searchForThis := "\\\\" + pc + "\\" + file
+	// fmt.Println(searchForThis)
+	if fileStat, err := os.Stat(searchForThis); err == nil {
 		countGood++
 		if argShowGood {
 			if !argSummary {
-				print(pc, "File Found")
-				maybeSaveToFile("1-"+argSave, pc, "File Found")
+				print(pc+" , "+searchForThis+" , "+fileStat.ModTime().Format(time.UnixDate), "")
+				maybeSaveToFile("1-"+argSave, pc+" , "+searchForThis+" , "+fileStat.ModTime().Format(time.UnixDate), "")
 			}
 		}
 	} else {
@@ -654,4 +670,44 @@ func checkFile(wg *sync.WaitGroup, pc string, file string, argShowGood bool, arg
 			}
 		}
 	}
+}
+
+// checkUserFile function will check the existence of a file or folder on a remote machine, in the USER folders.
+func checkUserFile(wg *sync.WaitGroup, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string) {
+	defer wg.Done()
+	wg2 := new(sync.WaitGroup)
+	// Determine user folders on this machine
+	remoteDir := "\\\\" + pc + "\\c$\\users\\"
+	userFolders, err := ioutil.ReadDir(remoteDir)
+	if err != nil {
+		print(pc, "Error reading "+remoteDir)
+		maybeSaveToFile("0-"+argSave, pc, "Error reading "+remoteDir)
+	} else {
+		// Check each User Folder in turn
+		for _, userFolder := range userFolders {
+			if userFolder.IsDir() {
+
+				// Compile the full path to be checked
+				folderToCheck := `c$\users\` + userFolder.Name() + `\` + userfile
+
+				// Double up the slashes
+				folderToCheck = strings.ReplaceAll(folderToCheck, `\`, `\\`)
+
+				// Powershell removes the single quotes, CMD doesn't, so we do it here.
+				folderToCheck = strings.ReplaceAll(folderToCheck, "'", "")
+
+				// : got converted to a $ earlier, but in a WMIC WHERE clause it needs to be a :
+				// So turn it back again.
+				folderToCheck = strings.ReplaceAll(folderToCheck, "$", ":")
+
+				// This is the WMIC command to be run
+				wmiData := `datafile where "name='` + folderToCheck + `'" get version /value`
+
+				// Launch it
+				wg2.Add(1)
+				go checkWMI(wg2, pc, wmiData, argShowGood, argShowBad, argSave)
+			}
+		}
+	}
+	wg2.Wait()
 }
