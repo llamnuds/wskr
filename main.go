@@ -577,7 +577,7 @@ func checkPing(wg *sync.WaitGroup, pc string, argShowGood bool, argShowBad bool,
 			}
 		}
 	} else {
-		// Something was returned
+		// Something, was returned
 		success := false
 		for _, value := range strings.Split(result, "\n") {
 			if strings.Contains(string(value), "Received = 1") {
@@ -705,9 +705,15 @@ func checkUserFile(wg *sync.WaitGroup, pc string, userfile string, argShowGood b
 
 				// Launch it
 				wg2.Add(1)
-				go checkWMI(wg2, pc, wmiData, argShowGood, argShowBad, argSave)
+				go checkFilePS(wg2, pc, wmiData, argShowGood, argShowBad, argSave)
 			}
 		}
 	}
 	wg2.Wait()
+}
+
+// Use PowerShell to check a File's stats (version, last mod etc)
+func checkFilePS(wg *sync.WaitGroup, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string) {
+	defer wg.Done()
+
 }
