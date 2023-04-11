@@ -713,6 +713,7 @@ func checkUserFile(wg *sync.WaitGroup, pc string, userfile string, argShowGood b
 // DONE - Access the remote files (on some of them at least, permissions permitting!).
 // TODO - Elevate access on remote systems.
 // TODO - Tidy up output.
+// TODO - Ensure stats work.
 
 // Use PowerShell to check a File's stats (version, last mod etc)
 func checkFilePS(wg *sync.WaitGroup, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string) {
