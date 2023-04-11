@@ -691,29 +691,47 @@ func checkUserFile(wg *sync.WaitGroup, pc string, userfile string, argShowGood b
 				folderToCheck := `c$\users\` + userFolder.Name() + `\` + userfile
 
 				// Double up the slashes
-				folderToCheck = strings.ReplaceAll(folderToCheck, `\`, `\\`)
+				// folderToCheck = strings.ReplaceAll(folderToCheck, `\`, `\\`)
 
 				// Powershell removes the single quotes, CMD doesn't, so we do it here.
-				folderToCheck = strings.ReplaceAll(folderToCheck, "'", "")
+				//folderToCheck = strings.ReplaceAll(folderToCheck, "'", "")
 
 				// : got converted to a $ earlier, but in a WMIC WHERE clause it needs to be a :
 				// So turn it back again.
 				folderToCheck = strings.ReplaceAll(folderToCheck, "$", ":")
 
-				// This is the WMIC command to be run
-				wmiData := `datafile where "name='` + folderToCheck + `'" get version /value`
-
 				// Launch it
 				wg2.Add(1)
-				go checkFilePS(wg2, pc, wmiData, argShowGood, argShowBad, argSave)
+				go checkFilePS(wg2, pc, folderToCheck, argShowGood, argShowBad, argSave)
 			}
 		}
 	}
 	wg2.Wait()
 }
 
+// * * *  * * *  UNDER DEVELOPMENT  * * *  * * *
+// DONE - Access the remote files (on some of them at least, permissions permitting!).
+// TODO - Elevate access on remote systems.
+// TODO - Tidy up output.
+
 // Use PowerShell to check a File's stats (version, last mod etc)
 func checkFilePS(wg *sync.WaitGroup, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
+
+	// Powershell Command to run
+	psCommand := `write-output $(gi "` + userfile + `").versionInfo.Productversion`
+
+	// Construct the PowerShell command with the required arguments
+	cmd := exec.Command("powershell", "-Command", psCommand, "-ComputerName", pc)
+
+	// Execute the command and capture the output
+	output, err := cmd.Output()
+	if err != nil {
+		print(pc, "ERR - Error = "+string(err.Error()))
+	} else {
+		results := string(output)
+		results = results[:strings.Index(results, "-ComputerName")]
+		print(pc, userfile+" = "+results)
+	}
 
 }
