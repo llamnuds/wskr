@@ -301,6 +301,7 @@ func printHelp() {
 	MANDATORY - You must have one, and only one, of these :-
 	(But do NOT use = after any of these.)
 	--file|-f		Search for a file.
+	--userfile|-u   Show files in a specified folder for all users.
 	--registry|-r	Search for a registry value.	
 	--ping|-g		Search for LIVE machines.
 	--free|-3		Search for machines with no active user.
@@ -327,8 +328,11 @@ func printHelp() {
 				e.g. rights, firewalls, remote services off etc.
 	
 	To search PC0001 through PC1234, finding machines that do NOT have "c:\data\some file.txt" use :-
-				wskr --show=0 --range=pc0001..pc1234 --file c:\data\some file.txt
+				wskr --show=0 --range=pc0001..pc1234 --file 'c:\data\some file.txt'
 	
+	To search PC00 through PC99, showing the files present for each user on each machine in a specific folder try something like :-
+				wskr --range-pc00..pc99 --userfile 'AppData\roaming\icaclient'
+
 	To search for a registry Value on a single computer :-
 				wskr -n=comp456 -r HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell
 	
@@ -453,7 +457,7 @@ func readRangeFromFile(myFile string) []string {
 		} else {
 			// Not a blank line
 			if data[0] == ' ' || data[0] == '#' {
-				// This is a remark line so ignore it
+				// DO NOTHING
 			} else {
 				//  Should be data so split into computername and comment
 				computer, _, found := strings.Cut(data, " ")
@@ -496,11 +500,7 @@ func splitMachineName(a string) (string, int, string) {
 func checkWMI(wg *sync.WaitGroup, pc string, argItem string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
 	// Launch an EXE and keep the results
-	//out, err := exec.Command("cmd", "/c", "wmic /node:"+pc+" "+argItem).Output()
 	out, err := exec.Command("cmd", "/c", "wmic /node:"+pc+" "+argItem).Output()
-	//fmt.Println("==> cmd.exe", " /c wmic /node:"+pc+" "+argItem)
-	//fmt.Println("==> out=", out)
-	//fmt.Println("==> err=", err.Error())
 	if err != nil {
 		if !argSummary {
 			if argShowBad {
@@ -710,40 +710,34 @@ func checkUserFile(wg *sync.WaitGroup, pc string, userfile string, argShowGood b
 }
 
 // * * *  * * *  UNDER DEVELOPMENT  * * *  * * *
-// DONE - Access the remote files (on some of them at least, permissions permitting!).
-// TODO - Elevate access on remote systems.
 // TODO - Tidy up output.
-// TODO - Ensure stats work.
+// TODO - Ensure blanks are counted as FAILS
+// TODO - In fact ensure things are being counted !
 
 // Use PowerShell to check a File's stats (version, last mod etc)
 func checkFilePS(wg *sync.WaitGroup, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
-
-	// $username = 'user'
-	// $password = 'password'
-	// $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
-	// $credential = New-Object System.Management.Automation.PSCredential $username, $securePassword
-	// Start-Process Notepad.exe -Credential $credential
 
 	// Powershell Command to run
 	psCommand := `write-output $(gci "\\` + pc + `\` + userfile + `")`
 
 	// Construct the PowerShell command with the required arguments
 	cmd := exec.Command("powershell", "-Command", psCommand)
-	// print(pc, cmd.String())
 
 	// Execute the command and capture the output
 	output, err := cmd.Output()
 	if err != nil {
+
+		// Show the Error
 		print(pc, "ERR - Error = "+string(err.Error()))
+
 	} else {
+
 		// Get the raw output
 		results := string(output)
 
-		// strip off the superfluous ending
-		// results = results[:strings.Index(results, "-ComputerName")]
-
 		// Show the results
+		// ...BUT, you could say that blanks reults = BADness
 		print(pc, userfile+" = "+results)
 	}
 
