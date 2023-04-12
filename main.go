@@ -329,12 +329,13 @@ func printHelp() {
 	
 	To search PC0001 through PC1234, finding machines that do NOT have "c:\data\some file.txt" use :-
 				wskr --show=0 --range=pc0001..pc1234 --file 'c:\data\some file.txt'
+				(Note the --show=0, to see only the failures.)
 	
 	To search PC00 through PC99, showing the files present for each user on each machine in a specific folder try something like :-
 				wskr --range-pc00..pc99 --userfile 'AppData\roaming\icaclient'
 
 	To search for a registry Value on a single computer :-
-				wskr -n=comp456 -r HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell
+				wskr -n=comp456 -r 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell'
 	
 	To see various things such as :-
 	   Logged in users, saving result:  wskr.exe --range=WS123 --wmic computersystem get username --save='output.txt'
