@@ -88,7 +88,7 @@ wskr --range-pc00..pc99 --userfile 'AppData\roaming\icaclient'
 
 To search for a REGISTRY Value on a single computer :-
 ```
-wskr -n=comp456 -r HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell
+wskr -n=comp456 -r 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell'
 ```	
 WMIC is useful to see a whole bunch of different things, such as :-
 ```
