@@ -78,7 +78,7 @@ To search ```PC0001``` through ```PC1234```, finding machines that do NOT have `
 
 *(Note the --show=0, to see only the failures.)*
 ```
-wskr --show=0 --range=pc0001..pc1234 --file c:\data\some file.txt
+wskr --show=0 --range=pc0001..pc1234 --file 'c:\data\some file.txt'
 ```	
 
 To search PC00 through PC99, showing the files present for each user on each machine in a specific folder try something like :-
