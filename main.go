@@ -740,7 +740,7 @@ func checkFilePS(wg *sync.WaitGroup, pc string, userfile string, argShowGood boo
 		results := string(output)
 
 		// Show the results
-		// ...BUT, you could say that blanks reults = BADness
+		// ...BUT, you could say that blanks reults = FAIL
 		print(pc, userfile+" = "+results)
 	}
 
