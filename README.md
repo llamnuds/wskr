@@ -36,6 +36,7 @@ You must have one, and only one, of these.
 *(But do NOT use = after any of these.)*
 ```
 --file|-f      some-file           Search for a file.
+	--userfile|-u   Show files in a specified folder for all users.
 --registry|-r  some-reg-value      Search for a registry value.	
 --wmic|-m      some-wmic-command   Run your WMIC your command.
 --ping|-g                          Search for LIVE machines.
@@ -79,6 +80,12 @@ To search ```PC0001``` through ```PC1234```, finding machines that do NOT have `
 ```
 wskr --show=0 --range=pc0001..pc1234 --file c:\data\some file.txt
 ```	
+
+To search PC00 through PC99, showing the files present for each user on each machine in a specific folder try something like :-
+```
+wskr --range-pc00..pc99 --userfile 'AppData\roaming\icaclient'
+```
+
 To search for a REGISTRY Value on a single computer :-
 ```
 wskr -n=comp456 -r HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell
