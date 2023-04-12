@@ -698,7 +698,7 @@ func checkUserFile(wg *sync.WaitGroup, pc string, userfile string, argShowGood b
 
 				// : got converted to a $ earlier, but in a WMIC WHERE clause it needs to be a :
 				// So turn it back again.
-				folderToCheck = strings.ReplaceAll(folderToCheck, "$", ":")
+				// folderToCheck = strings.ReplaceAll(folderToCheck, "$", ":")
 
 				// Launch it
 				wg2.Add(1)
@@ -719,19 +719,31 @@ func checkUserFile(wg *sync.WaitGroup, pc string, userfile string, argShowGood b
 func checkFilePS(wg *sync.WaitGroup, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
 
+	// $username = 'user'
+	// $password = 'password'
+	// $securePassword = ConvertTo-SecureString $password -AsPlainText -Force
+	// $credential = New-Object System.Management.Automation.PSCredential $username, $securePassword
+	// Start-Process Notepad.exe -Credential $credential
+
 	// Powershell Command to run
-	psCommand := `write-output $(gi "` + userfile + `").versionInfo.Productversion`
+	psCommand := `write-output $(gci "\\` + pc + `\` + userfile + `")`
 
 	// Construct the PowerShell command with the required arguments
-	cmd := exec.Command("powershell", "-Command", psCommand, "-ComputerName", pc)
+	cmd := exec.Command("powershell", "-Command", psCommand)
+	// print(pc, cmd.String())
 
 	// Execute the command and capture the output
 	output, err := cmd.Output()
 	if err != nil {
 		print(pc, "ERR - Error = "+string(err.Error()))
 	} else {
+		// Get the raw output
 		results := string(output)
-		results = results[:strings.Index(results, "-ComputerName")]
+
+		// strip off the superfluous ending
+		// results = results[:strings.Index(results, "-ComputerName")]
+
+		// Show the results
 		print(pc, userfile+" = "+results)
 	}
 
