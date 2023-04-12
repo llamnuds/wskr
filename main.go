@@ -710,6 +710,12 @@ func checkUserFile(wg *sync.WaitGroup, pc string, userfile string, argShowGood b
 // TODO - Tidy up output.
 // TODO - Ensure blanks are counted as FAILS
 // TODO - In fact ensure things are being counted !
+// TODO - Only show what needs to be shown.
+// TODO - Write to file if required.
+// TODO - Try to stop Powershell from saying :-
+// 			"Searching for available modules
+//			Searching UNC share \\MTWData\Home\Data\WindowsPowerShell\Modules"
+// ...as it's cluttering up the screen on a big run, and is perhaps slowing things down?
 
 // Use PowerShell to check a File's stats (version, last mod etc)
 func checkFilePS(wg *sync.WaitGroup, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string) {
