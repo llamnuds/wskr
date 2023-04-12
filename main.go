@@ -365,7 +365,7 @@ func printHelp() {
 		5) Ensure any required firewall ports are open between your machine and the remote machines.
 
 	v0.1 - Copyright 2023
-	Author -- Shaun Dunmall.
+	Author -- llamnuds.
 	
 			`)
 	os.Exit(0)
