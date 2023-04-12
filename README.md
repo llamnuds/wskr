@@ -124,5 +124,5 @@ The above ranges could be in the machine name range format:
 
 ## v0.1 - Copyright 2023
 
-Author - Shaun Dunmall
+Author - llamnuds
 
