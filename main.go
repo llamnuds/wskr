@@ -693,12 +693,8 @@ func checkUserFile(wg *sync.WaitGroup, pc string, userfile string, argShowGood b
 				// Double up the slashes
 				// folderToCheck = strings.ReplaceAll(folderToCheck, `\`, `\\`)
 
-				// Powershell removes the single quotes, CMD doesn't, so we do it here.
-				//folderToCheck = strings.ReplaceAll(folderToCheck, "'", "")
-
-				// : got converted to a $ earlier, but in a WMIC WHERE clause it needs to be a :
-				// So turn it back again.
-				// folderToCheck = strings.ReplaceAll(folderToCheck, "$", ":")
+				// Powershell removes the single quotes, CMD doesn't, so we do it here - CHECK to see if this needs to go back in.   XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+				// folderToCheck = strings.ReplaceAll(folderToCheck, "'", "")
 
 				// Launch it
 				wg2.Add(1)
