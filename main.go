@@ -435,7 +435,6 @@ func checkFree(wg *sync.WaitGroup, pc, argItem string, argShowGood, argShowBad b
 		}
 		countGood++
 	}
-
 }
 
 // readRangeFromFile function returns a slice of computer names
@@ -653,7 +652,6 @@ func checkRegistry(wg *sync.WaitGroup, pc string, registry string, argShowGood b
 func checkFile(wg *sync.WaitGroup, pc string, file string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
 	searchForThis := "\\\\" + pc + "\\" + file
-	// fmt.Println(searchForThis)
 	if fileStat, err := os.Stat(searchForThis); err == nil {
 		countGood++
 		if argShowGood {
@@ -706,12 +704,6 @@ func checkUserFile(wg *sync.WaitGroup, pc string, userfile string, argShowGood b
 	wg2.Wait()
 }
 
-// * * *  * * *  UNDER DEVELOPMENT  * * *  * * *
-// TODO - Tidy up output.
-// TODO - Ensure blanks are counted as FAILS
-// TODO - In fact ensure things are being counted !
-// TODO - Only show what needs to be shown.
-// TODO - Write to file if required.
 // TODO - Try to stop Powershell from saying :-
 // 			"Searching for available modules
 //			Searching UNC share \\MTWData\Home\Data\WindowsPowerShell\Modules"
@@ -729,19 +721,32 @@ func checkFilePS(wg *sync.WaitGroup, pc string, userfile string, argShowGood boo
 
 	// Execute the command and capture the output
 	output, err := cmd.Output()
-	if err != nil {
+	results := string(output)
+	success := false
 
-		// Show the Error
-		print(pc, "ERR - Error = "+string(err.Error()))
-
-	} else {
-
-		// Get the raw output
-		results := string(output)
-
-		// Show the results
-		// ...BUT, you could say that blanks reults = FAIL
-		print(pc, userfile+" = "+results)
+	if err == nil {
+		// No err but, blanks are bad too!
+		if results != "" {
+			success = true
+		}
 	}
 
+	if success {
+		countGood++
+		if !argSummary && argShowGood {
+			print(pc, userfile+" = "+results)
+			maybeSaveToFile("1-"+argSave, pc, userfile+" = "+results)
+		}
+	} else {
+		countBad++
+		if !argSummary && argShowBad {
+			if results == "" {
+				print(pc, "Not found.")
+				maybeSaveToFile("0-"+argSave, pc, "Not found.")
+			} else {
+				print(pc, "Error = "+string(err.Error()))
+				maybeSaveToFile("0-"+argSave, pc, "Error = "+string(err.Error()))
+			}
+		}
+	}
 }
