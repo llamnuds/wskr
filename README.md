@@ -37,7 +37,7 @@ You must have one, and only one, of these.
 *(But do NOT use = after any of these.)*
 ```
 --file|-f      some-file           Search for a file.
-	--userfile|-u   Show files in a specified folder for all users.
+--userfile|-u   Show files in a specified folder for all users.
 --registry|-r  some-reg-value      Search for a registry value.	
 --wmic|-m      some-wmic-command   Run your WMIC your command.
 --ping|-g                          Search for LIVE machines.
