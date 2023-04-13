@@ -6,6 +6,7 @@ Do you manage hundreds or thousands of machines?  Then this simple tool could be
 * Scan a range of Windows machines quickly
 * Look for a registry value
 * Look for the presence or absence of a file or folder
+* Look for files and folders inside the USER folder on machines.
 * See which machines are alive, or not
 * Use WMI to find machines ...
   * IP address
