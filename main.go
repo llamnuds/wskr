@@ -1,14 +1,3 @@
-/*
-
-TO DO
-=====
-1) Add option to read computer list from AD.
-2) Prevent WMI calls from applying changes or running programs.
-3) Time the run and display the result.
-4) Add a --PINGFIRST option, to only check machines that are on.
-
-*/
-
 package main
 
 import (
