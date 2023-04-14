@@ -695,11 +695,6 @@ func checkUserFile(wg *sync.WaitGroup, pc string, userfile string, argShowGood b
 	wg2.Wait()
 }
 
-// TODO - Try to stop Powershell from saying :-
-// 			"Searching for available modules
-//			Searching UNC share \\MTWData\Home\Data\WindowsPowerShell\Modules"
-// ...as it's cluttering up the screen on a big run, and is perhaps slowing things down?
-
 // Use PowerShell to check a File's stats (version, last mod etc)
 func checkFilePS(wg *sync.WaitGroup, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
