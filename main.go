@@ -668,8 +668,10 @@ func checkUserFile(wg *sync.WaitGroup, pc string, userfile string, argShowGood b
 	remoteDir := "\\\\" + pc + "\\c$\\users\\"
 	userFolders, err := ioutil.ReadDir(remoteDir)
 	if err != nil {
-		print(pc, "Error reading "+remoteDir)
-		maybeSaveToFile("0-"+argSave, pc, "Error reading "+remoteDir)
+		if !argSummary && argShowBad {
+			print(pc, "Error reading "+remoteDir)
+			maybeSaveToFile("0-"+argSave, pc, "Error reading "+remoteDir)
+		}
 	} else {
 		// Check each User Folder in turn
 		for _, userFolder := range userFolders {
