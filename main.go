@@ -14,12 +14,20 @@ import (
 	"time"
 )
 
+var mu sync.Mutex // Declare a Mutex
 var countGood = 0
 var countBad = 0
 var argSummary = false
 var usingFile = false
 var computerList []string
 var fileOfCompNames = ""
+
+type result struct {
+	rTime   time.Time
+	rResult bool
+}
+
+var results []result
 
 func main() {
 	wg := new(sync.WaitGroup)
@@ -250,10 +258,13 @@ func main() {
 	}
 	fmt.Println()
 
+	// Start NOW !
+	startTime := time.Now()
+
 	if usingFile {
 		// Iterate through computerList
 		for _, pc := range computerList {
-			performAction(wg, argAction, pc, argItem, argShowGood, argShowBad, argSave)
+			performAction(wg, &mu, argAction, pc, argItem, argShowGood, argShowBad, argSave)
 
 			// Delay before next searcher launched
 			time.Sleep(time.Duration(argDelay) * time.Second)
@@ -267,7 +278,7 @@ func main() {
 			}
 			pc = argPrefix + pc
 			// Perform the action
-			performAction(wg, argAction, pc, argItem, argShowGood, argShowBad, argSave)
+			performAction(wg, &mu, argAction, pc, argItem, argShowGood, argShowBad, argSave)
 
 			// Delay before next searcher launched
 			time.Sleep(time.Duration(argDelay) * time.Second)
@@ -283,6 +294,11 @@ func main() {
 	fmt.Println("Failures :", countBad)
 	fmt.Println("Successes :", countGood)
 	fmt.Println("Total :", countBad+countGood)
+	fmt.Println()
+	for i, r := range results {
+		t := r.rTime.Sub(startTime)
+		fmt.Printf("%d Result %t, Time %.2f\n", i, r.rResult, t.Seconds())
+	}
 	fmt.Println()
 }
 
@@ -369,64 +385,44 @@ func printHelp() {
 
 // performAction function checks to see which single function is required
 // and executes it.
-func performAction(wg *sync.WaitGroup, argAction string, pc string,
-	argItem string, argShowGood bool, argShowBad bool, argSave string) {
+func performAction(wg *sync.WaitGroup, mu *sync.Mutex, argAction string, pc string, argItem string, argShowGood bool, argShowBad bool, argSave string) {
 
-	// wg.Add(1)
-
-	// PING the machine to ensure it is alive before testing.
-
-	didPing := false
-	var buffer bytes.Buffer
-	cmd := exec.Command("ping", pc, "-n", "1", "-4")
-	cmd.Stdout = &buffer
-	_ = cmd.Run()
-	result := buffer.String()
-
-	if len(result) < 100 {
-		didPing = false
-	} else {
-		// Hmmmm....something, was returned.
-		for _, value := range strings.Split(result, "\n") {
-			if strings.Contains(string(value), "Received = 1") {
-				didPing = true
-			}
-		}
-	}
-
-	if !didPing {
-		// The machine is off, so RETURN, unless we are PINGING as our main function
-		if argAction != "Ping" {
-			return
-		}
-	}
-
-	// OK, it did Ping, so carry on and do your thing!
-	// (Or PING is our main action.)
 	wg.Add(1)
 
 	if argAction == "File" {
-		go checkFile(wg, pc, argItem, argShowGood, argShowBad, argSave)
+		go checkFile(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
 	}
 	if argAction == "UserFile" {
-		go checkUserFile(wg, pc, argItem, argShowGood, argShowBad, argSave)
+		go checkUserFile(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
 	}
 	if argAction == "Registry" {
-		go checkRegistry(wg, pc, argItem, argShowGood, argShowBad, argSave)
+		go checkRegistry(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
 	}
 	if argAction == "Ping" {
-		go checkPing(wg, pc, argShowGood, argShowBad, argSave)
+		go checkPing(wg, mu, pc, argShowGood, argShowBad, argSave)
 	}
 	if argAction == "WMIC" {
-		go checkWMI(wg, pc, argItem, argShowGood, argShowBad, argSave)
+		go checkWMI(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
 	}
 	if argAction == "Free" {
-		go checkFree(wg, pc, argItem, argShowGood, argShowBad, argSave)
+		go checkFree(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
 	}
 }
 
+func badResult() {
+	mu.Lock()
+	results = append(results, result{rTime: time.Now(), rResult: false})
+	mu.Unlock()
+}
+
+func goodResult() {
+	mu.Lock()
+	results = append(results, result{rTime: time.Now(), rResult: true})
+	mu.Unlock()
+}
+
 // checkFree function checks to see if a device has no active user.
-func checkFree(wg *sync.WaitGroup, pc, argItem string, argShowGood, argShowBad bool, argSave string) {
+func checkFree(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argItem string, argShowGood, argShowBad bool, argSave string) {
 	defer wg.Done()
 	// Launch an EXE and keep the results
 	out, err := exec.Command("cmd", "/c", "wmic /node:"+pc+" computersystem get username").Output()
@@ -451,6 +447,7 @@ func checkFree(wg *sync.WaitGroup, pc, argItem string, argShowGood, argShowBad b
 			}
 		}
 		countBad++
+		badResult()
 	} else {
 		if !argSummary {
 			if argShowGood {
@@ -459,6 +456,7 @@ func checkFree(wg *sync.WaitGroup, pc, argItem string, argShowGood, argShowBad b
 			}
 		}
 		countGood++
+		goodResult()
 	}
 }
 
@@ -522,7 +520,7 @@ func splitMachineName(a string) (string, int, string) {
 }
 
 // checkWMI function performs some user requested WMI check on a remote machine
-func checkWMI(wg *sync.WaitGroup, pc string, argItem string, argShowGood bool, argShowBad bool, argSave string) {
+func checkWMI(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argItem string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
 	// Launch an EXE and keep the results
 	out, err := exec.Command("cmd", "/c", "wmic /node:"+pc+" "+argItem).Output()
@@ -583,7 +581,7 @@ func print(pc string, data string) {
 }
 
 // checkPing function will see if a machine is alive or not.
-func checkPing(wg *sync.WaitGroup, pc string, argShowGood bool, argShowBad bool, argSave string) {
+func checkPing(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
 
 	var buffer bytes.Buffer
@@ -595,6 +593,7 @@ func checkPing(wg *sync.WaitGroup, pc string, argShowGood bool, argShowBad bool,
 	if len(result) < 100 {
 		// FAILED TO PING
 		countBad++
+		badResult()
 		if argShowBad { // We want to see the failures
 			if !argSummary { // But not if we only want to see the summary counts
 				print(pc, "NOT-Alive")
@@ -612,6 +611,7 @@ func checkPing(wg *sync.WaitGroup, pc string, argShowGood bool, argShowBad bool,
 
 		if success {
 			countGood++
+			goodResult()
 			if !argSummary {
 				if argShowGood {
 					print(pc, "Alive")
@@ -620,6 +620,7 @@ func checkPing(wg *sync.WaitGroup, pc string, argShowGood bool, argShowBad bool,
 			}
 		} else {
 			countBad++
+			badResult()
 			if argShowBad { // We want to see the failures
 				if !argSummary { // Unless we only want to see the summaries
 					print(pc, "NOT-Alive")
@@ -664,7 +665,7 @@ func getRegData(pc, key, value string, argShowGood bool, argShowBad bool, argSav
 }
 
 // checkRegistry function will attempt to get a registry value from a remote computer's registry.
-func checkRegistry(wg *sync.WaitGroup, pc string, registry string, argShowGood bool, argShowBad bool, argSave string) {
+func checkRegistry(wg *sync.WaitGroup, mu *sync.Mutex, pc string, registry string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
 	registrySplit := strings.Split(registry, `\`)
 	regSplitLengthMinusOne := len(registrySplit) - 1
@@ -674,7 +675,7 @@ func checkRegistry(wg *sync.WaitGroup, pc string, registry string, argShowGood b
 }
 
 // checkFile function will check the existence of a file or folder on a remote machine.
-func checkFile(wg *sync.WaitGroup, pc string, file string, argShowGood bool, argShowBad bool, argSave string) {
+func checkFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
 	searchForThis := "\\\\" + pc + "\\" + file
 	if fileStat, err := os.Stat(searchForThis); err == nil {
@@ -697,7 +698,7 @@ func checkFile(wg *sync.WaitGroup, pc string, file string, argShowGood bool, arg
 }
 
 // checkUserFile function will check the existence of a file or folder on a remote machine, in the USER folders.
-func checkUserFile(wg *sync.WaitGroup, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string) {
+func checkUserFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
 	wg2 := new(sync.WaitGroup)
 	// Determine user folders on this machine
@@ -724,7 +725,7 @@ func checkUserFile(wg *sync.WaitGroup, pc string, userfile string, argShowGood b
 
 				// Launch it
 				wg2.Add(1)
-				go checkFilePS(wg2, pc, folderToCheck, argShowGood, argShowBad, argSave)
+				go checkFilePS(wg2, mu, pc, folderToCheck, argShowGood, argShowBad, argSave)
 			}
 		}
 	}
@@ -732,7 +733,7 @@ func checkUserFile(wg *sync.WaitGroup, pc string, userfile string, argShowGood b
 }
 
 // Use PowerShell to check a File's stats (version, last mod etc)
-func checkFilePS(wg *sync.WaitGroup, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string) {
+func checkFilePS(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
 
 	// Powershell Command to run
