@@ -114,6 +114,7 @@ The above ranges could be in the machine name range format:
 2) ```--ping``` is reliant on Windows ```PING.EXE```
 3) ```--wmic``` is reliant on Windows ```WMIC.EXE```
 4) ```--registry``` is reliant on Windows ```REG.EXE```
+5) ```--userfile``` is reliant on Windows ```POWERSHELL.EXE```
 
 
 ## ASSUMPTIONS
