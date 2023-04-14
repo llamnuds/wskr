@@ -253,7 +253,10 @@ func main() {
 	if usingFile {
 		// Iterate through computerList
 		for _, pc := range computerList {
-			performAction(argDelay, wg, argAction, pc, argItem, argShowGood, argShowBad, argSave)
+			performAction(wg, argAction, pc, argItem, argShowGood, argShowBad, argSave)
+
+			// Delay before next searcher launched
+			time.Sleep(time.Duration(argDelay) * time.Second)
 		}
 	} else {
 		for i := argStart; i <= argEnd; i++ {
@@ -264,7 +267,11 @@ func main() {
 			}
 			pc = argPrefix + pc
 			// Perform the action
-			performAction(argDelay, wg, argAction, pc, argItem, argShowGood, argShowBad, argSave)
+			performAction(wg, argAction, pc, argItem, argShowGood, argShowBad, argSave)
+
+			// Delay before next searcher launched
+			time.Sleep(time.Duration(argDelay) * time.Second)
+
 		}
 	}
 	fmt.Println("Waiting for searchers to finish...")
@@ -362,11 +369,40 @@ func printHelp() {
 
 // performAction function checks to see which single function is required
 // and executes it.
-func performAction(argDelay int, wg *sync.WaitGroup, argAction string, pc string, argItem string, argShowGood bool, argShowBad bool, argSave string) {
+func performAction(wg *sync.WaitGroup, argAction string, pc string,
+	argItem string, argShowGood bool, argShowBad bool, argSave string) {
 
-	// Delay before next searcher launched
-	time.Sleep(time.Duration(argDelay) * time.Second)
+	// wg.Add(1)
 
+	// PING the machine to ensure it is alive before testing.
+
+	didPing := false
+	var buffer bytes.Buffer
+	cmd := exec.Command("ping", pc, "-n", "1", "-4")
+	cmd.Stdout = &buffer
+	_ = cmd.Run()
+	result := buffer.String()
+
+	if len(result) < 100 {
+		didPing = false
+	} else {
+		// Hmmmm....something, was returned.
+		for _, value := range strings.Split(result, "\n") {
+			if strings.Contains(string(value), "Received = 1") {
+				didPing = true
+			}
+		}
+	}
+
+	if !didPing {
+		// The machine is off, so RETURN, unless we are PINGING as our main function
+		if argAction != "Ping" {
+			return
+		}
+	}
+
+	// OK, it did Ping, so carry on and do your thing!
+	// (Or PING is our main action.)
 	wg.Add(1)
 
 	if argAction == "File" {
@@ -549,7 +585,7 @@ func print(pc string, data string) {
 // checkPing function will see if a machine is alive or not.
 func checkPing(wg *sync.WaitGroup, pc string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
-	// Launch an EXE and keep the results
+
 	var buffer bytes.Buffer
 	cmd := exec.Command("ping", pc, "-n", "1", "-4")
 	cmd.Stdout = &buffer
