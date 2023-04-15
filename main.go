@@ -297,15 +297,18 @@ func main() {
 	fmt.Println()
 
 	// Print out the timing stats
-	var bucketCount = 10
-	var buckets [11]int
+	const bucketCount = 10
+	var goodBuckets [bucketCount + 1]int
+	var badBuckets [bucketCount + 1]int
+
+	// Maximum number of characters in graph
+	const maxCharCount = 40
 
 	// Find the range of result times
 	// And the lowest time.
 	bucketRange := 0.0
 	bucketLow := 99999.0
 	bucketHigh := 0.0
-
 	for _, r := range results {
 		t := r.rTime.Sub(startTime)
 		if t.Seconds() < bucketLow {
@@ -318,23 +321,43 @@ func main() {
 	}
 	bucketRange = bucketHigh - bucketLow
 
-	//fmt.Println(bucketLow, bucketHigh, bucketRange)
-
-	// Fill the buckets with the results
+	// Fill the Buckets with the results
 	for _, r := range results {
 		t := (r.rTime.Sub(startTime)).Seconds()
 		bucketIndex := int((t - bucketLow) / bucketRange * float64(bucketCount))
-		//fmt.Println(bucketIndex)
-		buckets[bucketIndex]++
-
+		if r.rResult {
+			goodBuckets[bucketIndex]++
+		} else {
+			badBuckets[bucketIndex]++
+		}
 	}
 
-	// Print the buckets out ==================================================================================================================================================
-	//for i, j := range buckets {
+	// Find the biggest bucket
+	bucketMaximum := 0
+	for _, j := range goodBuckets {
+		if j > bucketMaximum {
+			bucketMaximum = j
+		}
+	}
+	for _, j := range badBuckets {
+		if j > bucketMaximum {
+			bucketMaximum = j
+		}
+	}
+	fmt.Println()
+	fmt.Println("Time to complete = %.1f Seconds", bucketRange)
+	fmt.Println()
 
-	//}
-	fmt.Println(buckets)
-
+	// Print the buckets
+	fmt.Println("Succeses :-")
+	for i, j := range goodBuckets {
+		fmt.Println(i, strings.Repeat("X", j*maxCharCount/bucketMaximum))
+	}
+	fmt.Println()
+	fmt.Println("Failures :-")
+	for i, j := range badBuckets {
+		fmt.Println(i, strings.Repeat("X", j*maxCharCount/bucketMaximum))
+	}
 	fmt.Println()
 
 }
