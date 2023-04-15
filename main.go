@@ -296,6 +296,10 @@ func main() {
 	fmt.Println("Total :", countBad+countGood)
 	fmt.Println()
 
+	if argStart == argEnd {
+		os.Exit(0)
+	}
+
 	// Print out the timing stats
 	const bucketCount = 10
 	var goodBuckets [bucketCount + 1]int
