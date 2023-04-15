@@ -295,11 +295,48 @@ func main() {
 	fmt.Println("Successes :", countGood)
 	fmt.Println("Total :", countBad+countGood)
 	fmt.Println()
-	for i, r := range results {
+
+	// Print out the timing stats
+	var bucketCount = 10
+	var buckets [11]int
+
+	// Find the range of result times
+	// And the lowest time.
+	bucketRange := 0.0
+	bucketLow := 99999.0
+	bucketHigh := 0.0
+
+	for _, r := range results {
 		t := r.rTime.Sub(startTime)
-		fmt.Printf("%d Result %t, Time %.2f\n", i, r.rResult, t.Seconds())
+		if t.Seconds() < bucketLow {
+			bucketLow = t.Seconds()
+		}
+		if t.Seconds() > bucketHigh {
+			bucketHigh = t.Seconds()
+		}
+
 	}
+	bucketRange = bucketHigh - bucketLow
+
+	//fmt.Println(bucketLow, bucketHigh, bucketRange)
+
+	// Fill the buckets with the results
+	for _, r := range results {
+		t := (r.rTime.Sub(startTime)).Seconds()
+		bucketIndex := int((t - bucketLow) / bucketRange * float64(bucketCount))
+		//fmt.Println(bucketIndex)
+		buckets[bucketIndex]++
+
+	}
+
+	// Print the buckets out ==================================================================================================================================================
+	//for i, j := range buckets {
+
+	//}
+	fmt.Println(buckets)
+
 	fmt.Println()
+
 }
 
 // printHelp function prints some helpful text.
