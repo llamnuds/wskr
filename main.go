@@ -446,7 +446,9 @@ func checkFree(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argItem string, ar
 				maybeSaveToFile("0-"+argSave, pc, err.Error())
 			}
 		}
+		mu.Lock()
 		countBad++
+		mu.Unlock()
 		badResult()
 	} else {
 		if !argSummary {
@@ -455,7 +457,9 @@ func checkFree(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argItem string, ar
 				maybeSaveToFile("1-"+argSave, pc, "is Free")
 			}
 		}
+		mu.Lock()
 		countGood++
+		mu.Unlock()
 		goodResult()
 	}
 }
@@ -531,7 +535,9 @@ func checkWMI(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argItem string, arg
 				maybeSaveToFile("0-"+argSave, pc, err.Error())
 			}
 		}
+		mu.Lock()
 		countBad++
+		mu.Unlock()
 	} else {
 		if !argSummary {
 			if argShowGood {
@@ -539,7 +545,9 @@ func checkWMI(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argItem string, arg
 				maybeSaveToFile("1-"+argSave, pc, string(out))
 			}
 		}
+		mu.Lock()
 		countGood++
+		mu.Unlock()
 	}
 }
 
@@ -592,7 +600,9 @@ func checkPing(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argShowGood bool, 
 
 	if len(result) < 100 {
 		// FAILED TO PING
+		mu.Lock()
 		countBad++
+		mu.Unlock()
 		badResult()
 		if argShowBad { // We want to see the failures
 			if !argSummary { // But not if we only want to see the summary counts
@@ -610,7 +620,9 @@ func checkPing(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argShowGood bool, 
 		}
 
 		if success {
+			mu.Lock()
 			countGood++
+			mu.Unlock()
 			goodResult()
 			if !argSummary {
 				if argShowGood {
@@ -619,7 +631,9 @@ func checkPing(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argShowGood bool, 
 				}
 			}
 		} else {
+			mu.Lock()
 			countBad++
+			mu.Unlock()
 			badResult()
 			if argShowBad { // We want to see the failures
 				if !argSummary { // Unless we only want to see the summaries
@@ -643,7 +657,9 @@ func getRegData(pc, key, value string, argShowGood bool, argShowBad bool, argSav
 
 	if buffer.String() == "" {
 		// Nothing was returned
+		mu.Lock()
 		countBad++
+		mu.Unlock()
 		if argShowBad {
 			// We want to see the failures
 			if !argSummary {
@@ -653,7 +669,9 @@ func getRegData(pc, key, value string, argShowGood bool, argShowBad bool, argSav
 		}
 	} else {
 		// Something was returned
+		mu.Lock()
 		countGood++
+		mu.Unlock()
 		if argShowGood {
 			// We want to see the successes
 			if !argSummary {
@@ -679,7 +697,9 @@ func checkFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSh
 	defer wg.Done()
 	searchForThis := "\\\\" + pc + "\\" + file
 	if fileStat, err := os.Stat(searchForThis); err == nil {
+		mu.Lock()
 		countGood++
+		mu.Unlock()
 		if argShowGood {
 			if !argSummary {
 				print(pc+" , "+searchForThis+" , "+fileStat.ModTime().Format(time.UnixDate), "")
@@ -687,7 +707,9 @@ func checkFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSh
 			}
 		}
 	} else {
+		mu.Lock()
 		countBad++
+		mu.Unlock()
 		if argShowBad {
 			if !argSummary {
 				print(pc, strings.Replace(err.Error(), "CreateFile ", "", -1))
@@ -755,13 +777,17 @@ func checkFilePS(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile string,
 	}
 
 	if success {
+		mu.Lock()
 		countGood++
+		mu.Unlock()
 		if !argSummary && argShowGood {
 			print(pc, userfile+" = "+results)
 			maybeSaveToFile("1-"+argSave, pc, userfile+" = "+results)
 		}
 	} else {
+		mu.Lock()
 		countBad++
+		mu.Unlock()
 		if !argSummary && argShowBad {
 			if results == "" {
 				print(pc, "Not found.")
