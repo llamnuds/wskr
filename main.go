@@ -294,11 +294,6 @@ func main() {
 	fmt.Println("Failures :", countBad)
 	fmt.Println("Successes :", countGood)
 	fmt.Println("Total :", countBad+countGood)
-	fmt.Println()
-
-	if argStart == argEnd {
-		os.Exit(0)
-	}
 
 	// Print out the timing stats
 	const bucketCount = 10
@@ -325,6 +320,13 @@ func main() {
 	}
 	bucketRange = bucketHigh - bucketLow
 
+	fmt.Println()
+	fmt.Printf("Time to complete = %.2f Seconds\n", bucketRange)
+	fmt.Println()
+	if argStart == argEnd {
+		os.Exit(0)
+	}
+
 	// Fill the Buckets with the results
 	for _, r := range results {
 		t := (r.rTime.Sub(startTime)).Seconds()
@@ -348,9 +350,6 @@ func main() {
 			bucketMaximum = j
 		}
 	}
-	fmt.Println()
-	fmt.Println("Time to complete = %.1f Seconds", bucketRange)
-	fmt.Println()
 
 	// Print the buckets
 
@@ -609,6 +608,7 @@ func checkWMI(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argItem string, arg
 		mu.Lock()
 		countBad++
 		mu.Unlock()
+		badResult()
 	} else {
 		if !argSummary {
 			if argShowGood {
@@ -619,6 +619,7 @@ func checkWMI(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argItem string, arg
 		mu.Lock()
 		countGood++
 		mu.Unlock()
+		goodResult()
 	}
 }
 
@@ -731,6 +732,7 @@ func getRegData(pc, key, value string, argShowGood bool, argShowBad bool, argSav
 		mu.Lock()
 		countBad++
 		mu.Unlock()
+		badResult()
 		if argShowBad {
 			// We want to see the failures
 			if !argSummary {
@@ -743,6 +745,7 @@ func getRegData(pc, key, value string, argShowGood bool, argShowBad bool, argSav
 		mu.Lock()
 		countGood++
 		mu.Unlock()
+		goodResult()
 		if argShowGood {
 			// We want to see the successes
 			if !argSummary {
@@ -771,6 +774,7 @@ func checkFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSh
 		mu.Lock()
 		countGood++
 		mu.Unlock()
+		goodResult()
 		if argShowGood {
 			if !argSummary {
 				print(pc+" , "+searchForThis+" , "+fileStat.ModTime().Format(time.UnixDate), "")
@@ -781,6 +785,7 @@ func checkFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSh
 		mu.Lock()
 		countBad++
 		mu.Unlock()
+		badResult()
 		if argShowBad {
 			if !argSummary {
 				print(pc, strings.Replace(err.Error(), "CreateFile ", "", -1))
@@ -851,6 +856,7 @@ func checkFilePS(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile string,
 		mu.Lock()
 		countGood++
 		mu.Unlock()
+		goodResult()
 		if !argSummary && argShowGood {
 			print(pc, userfile+" = "+results)
 			maybeSaveToFile("1-"+argSave, pc, userfile+" = "+results)
@@ -859,6 +865,7 @@ func checkFilePS(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile string,
 		mu.Lock()
 		countBad++
 		mu.Unlock()
+		badResult()
 		if !argSummary && argShowBad {
 			if results == "" {
 				print(pc, "Not found.")
