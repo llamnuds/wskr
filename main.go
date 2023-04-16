@@ -321,7 +321,7 @@ func main() {
 	bucketRange = bucketHigh - bucketLow
 
 	fmt.Println()
-	fmt.Printf("Time to complete = %.2f Seconds\n", bucketRange)
+	fmt.Printf("Time to complete = %.2f Seconds\n", bucketHigh)
 	fmt.Println()
 	if argStart == argEnd {
 		os.Exit(0)
