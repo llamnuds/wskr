@@ -344,6 +344,11 @@ func main() {
 		if j > bucketMaximum {
 			bucketMaximum = j
 		}
+		for _, j := range badBuckets {
+			if j > bucketMaximum {
+				bucketMaximum = j
+			}
+		}
 	}
 
 	// Print the buckets
