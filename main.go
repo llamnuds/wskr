@@ -296,12 +296,12 @@ func main() {
 	fmt.Println("Total :", countBad+countGood)
 
 	// Print out the timing stats
-	const bucketCount = 10
+	const bucketCount = 20
 	var goodBuckets [bucketCount + 1]int
 	var badBuckets [bucketCount + 1]int
 
 	// Maximum number of characters in graph
-	const maxCharCount = 100
+	const maxCharCount = 120
 
 	// Find the range of result times
 	// And the lowest time.
@@ -359,7 +359,7 @@ func main() {
 	for i, j := range goodBuckets[:len(goodBuckets)-1] {
 		thisBucketStart := float64(i)*bucketWidth + bucketLow
 		thisBucketEnd := thisBucketStart + bucketWidth
-		fmt.Printf("%2d %5.2f %5.2f |%-100s|\n", i+1, thisBucketStart, thisBucketEnd, strings.Repeat("O", j*maxCharCount/bucketMaximum))
+		fmt.Printf("%2d %5.2f %5.2f |%-120s|\n", i+1, thisBucketStart, thisBucketEnd, strings.Repeat("O", j*maxCharCount/bucketMaximum))
 	}
 
 	fmt.Println()
@@ -367,7 +367,7 @@ func main() {
 	for i, j := range badBuckets[:len(badBuckets)-1] {
 		thisBucketStart := float64(i)*bucketWidth + bucketLow
 		thisBucketEnd := thisBucketStart + bucketWidth
-		fmt.Printf("%2d %5.2f %5.2f |%-100s|\n", i+1, thisBucketStart, thisBucketEnd, strings.Repeat("X", j*maxCharCount/bucketMaximum))
+		fmt.Printf("%2d %5.2f %5.2f |%-120s|\n", i+1, thisBucketStart, thisBucketEnd, strings.Repeat("X", j*maxCharCount/bucketMaximum))
 	}
 	fmt.Println()
 
