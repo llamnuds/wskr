@@ -313,10 +313,10 @@ func main() {
 		if t.Seconds() < bucketLow {
 			bucketLow = t.Seconds()
 		}
+
 		if t.Seconds() > bucketHigh {
 			bucketHigh = t.Seconds()
 		}
-
 	}
 	bucketRange = bucketHigh - bucketLow
 
@@ -330,7 +330,7 @@ func main() {
 	// Fill the Buckets with the results
 	for _, r := range results {
 		t := (r.rTime.Sub(startTime)).Seconds()
-		bucketIndex := int((t - bucketLow) / bucketRange * float64(bucketCount))
+		bucketIndex := int((t - bucketLow) / (bucketRange + 1) * float64(bucketCount))
 		if r.rResult {
 			goodBuckets[bucketIndex]++
 		} else {
@@ -338,35 +338,31 @@ func main() {
 		}
 	}
 
-	// Find the biggest bucket
+	// Find the biggest bucket count
 	bucketMaximum := 0
 	for _, j := range goodBuckets {
 		if j > bucketMaximum {
 			bucketMaximum = j
 		}
 	}
-	for _, j := range badBuckets {
-		if j > bucketMaximum {
-			bucketMaximum = j
-		}
-	}
 
 	// Print the buckets
-
 	bucketWidth := bucketRange / bucketCount
-	bucketStart := bucketLow
+
+	fmt.Println()
 	fmt.Println("Succeses :-")
 	for i, j := range goodBuckets[:len(goodBuckets)-1] {
-		bucketStart := float64(i)*bucketWidth + bucketStart
-		bucketEnd := bucketStart + bucketWidth
-		fmt.Printf("%2d %5.2f %5.2f |%-100s|\n", i+1, bucketStart, bucketEnd, strings.Repeat("X", j*maxCharCount/bucketMaximum))
+		thisBucketStart := float64(i)*bucketWidth + bucketLow
+		thisBucketEnd := thisBucketStart + bucketWidth
+		fmt.Printf("%2d %5.2f %5.2f |%-100s|\n", i+1, thisBucketStart, thisBucketEnd, strings.Repeat("O", j*maxCharCount/bucketMaximum))
 	}
+
 	fmt.Println()
 	fmt.Println("Failures :-")
-	for i, j := range badBuckets[:len(goodBuckets)-1] {
-		bucketStart := float64(i)*bucketWidth + bucketStart
-		bucketEnd := bucketStart + bucketWidth
-		fmt.Printf("%2d %5.2f %5.2f |%-100s|\n", i+1, bucketStart, bucketEnd, strings.Repeat("X", j*maxCharCount/bucketMaximum))
+	for i, j := range badBuckets[:len(badBuckets)-1] {
+		thisBucketStart := float64(i)*bucketWidth + bucketLow
+		thisBucketEnd := thisBucketStart + bucketWidth
+		fmt.Printf("%2d %5.2f %5.2f |%-100s|\n", i+1, thisBucketStart, thisBucketEnd, strings.Repeat("X", j*maxCharCount/bucketMaximum))
 	}
 	fmt.Println()
 
