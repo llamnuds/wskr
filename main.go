@@ -414,6 +414,7 @@ func printHelp() {
 	[--delay=|-d=]	Integer		Seconds of Delay between machines.
 	[--save=|-v=]	'String'	File name, to save in same location as EXE. Use single quotes.
 	[--summary|-y]				Just give final counts.
+	[--timings|-t]              Display the timings of the results coming back.
 	[--help|-?]					This help page.
 
 	*Note :- Finding something may be more meaningful that NOT being able to find something.
