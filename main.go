@@ -44,8 +44,9 @@ func main() {
 	var argAction string = "Nothing"
 	var argItem string = ""
 	var argSave string = ""
+	var argTimings bool = false
 
-	// Used letters - 3defgmnprsuvwxy
+	// Used letters - 3defgmnprstuvwxy
 
 	if len(os.Args) == 1 {
 		printHelp()
@@ -124,6 +125,10 @@ func main() {
 
 				if v3[0] == "--show" || v3[0] == "-w" {
 					argShow = v3[1]
+				}
+
+				if v3[0] == "--timings" || v3[0] == "-t" {
+					argTimings = true
 				}
 
 				if v3[0] == "--delay" || v3[0] == "-d" {
@@ -324,6 +329,11 @@ func main() {
 	fmt.Printf("Time to complete = %.2f Seconds\n", bucketHigh)
 	fmt.Println()
 	if argStart == argEnd {
+		os.Exit(0)
+	}
+
+	// Quit if we don't want to print the timings, otherwise carry on.
+	if !argTimings {
 		os.Exit(0)
 	}
 
