@@ -64,8 +64,9 @@ You will need to state a RANGE of computers to look at.
 [--delay=|-d=]    Integer   Seconds of Delay between machines.            Default = 0 Seconds
 [--save=|-v=]     'String'  File name, to save in same location as EXE.   Use single quotes.
 [--summary|-y]              Just give final counts.
+[--timings|-t]              Display the timings of the results that come back.
+[--help|-?]                 Show a help page.
 ```
-
 
 ## SAVING THE RESULTS
 You can save the results of your scan to a file using the following option:
