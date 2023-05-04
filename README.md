@@ -128,6 +128,14 @@ The above ranges could be in the machine name range format:
 ## v0.1 - Copyright 2023
 
 ## RESTRICTIONS
+The following are not allowed in conjunction with --WMIC :-
+1) CALL
+2) CREATE
+3) UNINSTALL
+4) DELETE
+5) JSCRIPT.DLL
+6) VBSCRIPT.DLL
+7) SHADOWCOPY
 
 ## Author - llamnuds
 
