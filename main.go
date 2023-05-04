@@ -198,7 +198,7 @@ func main() {
 	if argAction == "Nothing" {
 		fmt.Println("No action specified, exiting..")
 		fmt.Println()
-		os.Exit(0)
+		os.Exit(1)
 	}
 
 	fmt.Println()
@@ -242,17 +242,17 @@ func main() {
 	if !usingFile && argStart == -1 {
 		fmt.Println("No START specified, exiting.")
 		fmt.Println()
-		os.Exit(0)
+		os.Exit(2)
 	}
 	if !usingFile && argEnd == -1 {
 		fmt.Println("No END specified, exiting..")
 		fmt.Println()
-		os.Exit(0)
+		os.Exit(3)
 	}
 	if !usingFile && argPrefix == "" {
 		fmt.Println("No PREFIX specified, exiting..")
 		fmt.Println()
-		os.Exit(0)
+		os.Exit(4)
 	}
 
 	fmt.Println("Type Y to continue :-")
@@ -262,6 +262,52 @@ func main() {
 		os.Exit(0)
 	}
 	fmt.Println()
+
+	// Check we are not using WMIC with delete, call, uninstall,create,jscript.dll,vbscript.dll,shadowcopy
+	// If we are then the user is trying to change something rather than just view
+	// so we warn and then EXIT
+	if strings.Contains(strings.ToUpper(argAction), "WMIC") {
+		if strings.Contains(strings.ToUpper(argItem), "DELETE") {
+			fmt.Println("WMIC call with disallowed option :- DELETE")
+			os.Exit(5)
+		}
+	}
+	if strings.Contains(strings.ToUpper(argAction), "WMIC") {
+		if strings.Contains(strings.ToUpper(argItem), "CALL") {
+			fmt.Println("WMIC call with disallowed option :- CALL")
+			os.Exit(6)
+		}
+	}
+	if strings.Contains(strings.ToUpper(argAction), "WMIC") {
+		if strings.Contains(strings.ToUpper(argItem), "UNINSTALL") {
+			fmt.Println("WMIC call with disallowed option :- UNINSTALL")
+			os.Exit(7)
+		}
+	}
+	if strings.Contains(strings.ToUpper(argAction), "WMIC") {
+		if strings.Contains(strings.ToUpper(argItem), "CREATE") {
+			fmt.Println("WMIC call with disallowed option :- CREATE")
+			os.Exit(8)
+		}
+	}
+	if strings.Contains(strings.ToUpper(argAction), "WMIC") {
+		if strings.Contains(strings.ToUpper(argItem), "JSCRIPT.DLL") {
+			fmt.Println("WMIC call with disallowed option :- JSCRIPT.DLL")
+			os.Exit(9)
+		}
+	}
+	if strings.Contains(strings.ToUpper(argAction), "WMIC") {
+		if strings.Contains(strings.ToUpper(argItem), "VBSCRIPT.DLL") {
+			fmt.Println("WMIC call with disallowed option :- VBSCRIPT.DLL")
+			os.Exit(10)
+		}
+	}
+	if strings.Contains(strings.ToUpper(argAction), "WMIC") {
+		if strings.Contains(strings.ToUpper(argItem), "SHADOWCOPY") {
+			fmt.Println("WMIC call with disallowed option :- SHADOWCOPY")
+			os.Exit(11)
+		}
+	}
 
 	// Start NOW !
 	startTime := time.Now()
@@ -328,6 +374,9 @@ func main() {
 	fmt.Println()
 	fmt.Printf("Time to complete = %.2f Seconds\n", bucketHigh)
 	fmt.Println()
+
+	// Quit if there was only one machine tested,
+	// As there won't be any interesting stats for it.
 	if argStart == argEnd {
 		os.Exit(0)
 	}
@@ -789,8 +838,8 @@ func checkFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSh
 		goodResult()
 		if argShowGood {
 			if !argSummary {
-				print(pc+" , "+searchForThis+" , "+fileStat.ModTime().Format(time.UnixDate), "")
-				maybeSaveToFile("1-"+argSave, pc+" , "+searchForThis+" , "+fileStat.ModTime().Format(time.UnixDate), "")
+				print(pc, searchForThis+" , "+fileStat.ModTime().Format(time.UnixDate))
+				maybeSaveToFile("1-"+argSave, pc, searchForThis+" , "+fileStat.ModTime().Format(time.UnixDate))
 			}
 		}
 	} else {
@@ -889,3 +938,19 @@ func checkFilePS(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile string,
 		}
 	}
 }
+
+/*
+
+Errors :-
+1  - No ACTION specified.
+2  - No START specified.
+3  - No END specified.
+4  - No PREFIX specified.
+5  - WMIC call with disallowed option - DELETE.
+6  - WMIC call with disallowed option - CALL.
+7  - WMIC call with disallowed option - UNINSTALL.
+8  - WMIC call with disallowed option - CREATE.
+9  - WMIC call with disallowed option - JSCRIPT.DLL.
+10 - WMIC call with disallowed option - VBSCRIPT.DLL.
+11 - WMIC call with disallowed option - SHADOWCOPY.
+*/
