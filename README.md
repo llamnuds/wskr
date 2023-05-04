@@ -125,8 +125,6 @@ The above ranges could be in the machine name range format:
 4) Ensure that WMI service is enabled and running on the remote machines.
 5) Ensure any required firewall ports are open between your machine and the remote machines.
 
-## v0.1 - Copyright 2023
-
 ## RESTRICTIONS
 The following are not allowed in conjunction with --WMIC :-
 1) CALL
@@ -138,4 +136,4 @@ The following are not allowed in conjunction with --WMIC :-
 7) SHADOWCOPY
 
 ## Author - llamnuds
-
+## v0.1 - Copyright 2023
