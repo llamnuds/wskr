@@ -121,7 +121,7 @@ The above ranges could be in the machine name range format:
 ## ASSUMPTIONS
 1) Your machine names have at least one character at the start, followed by at least one digit.
 2) The machines you are scanning are running Windows.
-3) You have admin rights on the remote machines.
+3) You have sufficient rights on the remote machines.
 4) Ensure that WMI service is enabled and running on the remote machines.
 5) Ensure any required firewall ports are open between your machine and the remote machines.
 
