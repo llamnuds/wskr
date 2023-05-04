@@ -18,7 +18,7 @@ Do you manage hundreds or thousands of machines?  Then this simple tool could be
   * Installed printers
   * OS version
   * ...and more...
-* No installation required
+* No installation required, ```wskr.exe``` is all you need.
 * No configuration files
 
 
