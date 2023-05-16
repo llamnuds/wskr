@@ -46,7 +46,7 @@ func main() {
 	var argSave string = ""
 	var argTimings bool = false
 
-	// Used letters - 3defgmnprstuvwxy
+	// Used letters - 3bdefgmnprstuvwxy / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
 
 	if len(os.Args) == 1 {
 		printHelp()
@@ -139,6 +139,10 @@ func main() {
 					argPad = v3[1]
 				}
 
+				if v3[0] == "--bitlocker" || v3[0] == "-b" {
+					argAction = "Bitlocker"
+				}
+
 				if v3[0] == "--file" || v3[0] == "-f" {
 					argAction = "File"
 				}
@@ -204,6 +208,8 @@ func main() {
 	fmt.Println()
 	if usingFile {
 		fmt.Println("Using Data File :-", fileOfCompNames)
+		fmt.Println("Delay =", argDelay, "seconds.")
+		fmt.Println("Timings = ", argTimings)
 	} else {
 		fmt.Println("Launching", argEnd-argStart+1, "actions.")
 		fmt.Println("Prefix =", argPrefix)
@@ -211,6 +217,7 @@ func main() {
 		fmt.Println("End =", argEnd)
 		fmt.Println("Pad =", argPad)
 		fmt.Println("Delay =", argDelay, "seconds.")
+		fmt.Println("Timings = ", argTimings)
 	}
 	fmt.Println()
 
@@ -235,6 +242,9 @@ func main() {
 	}
 	if argAction == "WMIC" {
 		fmt.Println("Will run WMIC against the machines.")
+	}
+	if argAction == "Bitlocker" {
+		fmt.Println("Will extract Bitlocker key from the machines.")
 	}
 
 	fmt.Println()
@@ -375,12 +385,6 @@ func main() {
 	fmt.Printf("Time to complete = %.2f Seconds\n", bucketHigh)
 	fmt.Println()
 
-	// Quit if there was only one machine tested,
-	// As there won't be any interesting stats for it.
-	if argStart == argEnd {
-		os.Exit(0)
-	}
-
 	// Quit if we don't want to print the timings, otherwise carry on.
 	if !argTimings {
 		os.Exit(0)
@@ -447,6 +451,7 @@ func printHelp() {
 	--registry|-r	Search for a registry value.	
 	--ping|-g		Search for LIVE machines.
 	--free|-3		Search for machines with no active user.
+	--bitlocker|-b  Retrieve Bitlocker Recovery key.
 	--wmic|-m		Run your WMIC your command.
 					For an HTML formatted output postfix this:- /format:hform
 					For a LIST output use this :- /format:list
@@ -546,6 +551,9 @@ func performAction(wg *sync.WaitGroup, mu *sync.Mutex, argAction string, pc stri
 	}
 	if argAction == "Free" {
 		go checkFree(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
+	}
+	if argAction == "Bitlocker" {
+		go checkBitlocker(wg, mu, pc, argShowGood, argShowBad, argSave)
 	}
 }
 
@@ -673,6 +681,42 @@ func checkWMI(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argItem string, arg
 			if argShowBad {
 				print(pc, err.Error())
 				maybeSaveToFile("0-"+argSave, pc, err.Error())
+			}
+		}
+		mu.Lock()
+		countBad++
+		mu.Unlock()
+		badResult()
+	} else {
+		if !argSummary {
+			if argShowGood {
+				print(pc, string(out))
+				maybeSaveToFile("1-"+argSave, pc, string(out))
+			}
+		}
+		mu.Lock()
+		countGood++
+		mu.Unlock()
+		goodResult()
+	}
+}
+
+// checkBitlocker function tries to read Bitlocker Recovery-ID key on a remote machine
+func checkBitlocker(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argShowGood bool, argShowBad bool, argSave string) {
+	defer wg.Done()
+	// Launch an EXE and keep the results
+
+	// Powershell Command to run
+	psCommand := `invoke-command -computername ` + pc + ` -scriptblock {$BitlockerVolumers = Get-BitLockerVolume;$BitlockerVolumers|ForEach-Object {$MountPoint=$_.MountPoint;$RecoveryKey=[string]($_.KeyProtector).RecoveryPassword;if ($RecoveryKey.Length -gt 5) {Write-Output ($RecoveryKey)}}}`
+
+	// Construct the PowerShell command with the required arguments
+	out, err := exec.Command("powershell", "-Command", psCommand).Output()
+
+	if (err != nil) || (len(string(out)) < 55) {
+		if !argSummary {
+			if argShowBad {
+				print(pc, "No Bitlocker Key retrieved.")
+				maybeSaveToFile("0-"+argSave, pc, "No Bitlocker Key retrieved.")
 			}
 		}
 		mu.Lock()

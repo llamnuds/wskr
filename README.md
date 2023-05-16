@@ -42,6 +42,7 @@ You must have one, and only one, of these.
 --wmic|-m      some-wmic-command   Run your WMIC your command.
 --ping|-g                          Search for LIVE machines.
 --free|-3                          Search for machines with no active user.
+--bitlocker|-b                     Retrieve Bitlocker Recovery key.
 ```
 * With ```--wmic```, For an HTML formatted output postfix this ```/format:hform``` ...or for a LIST output use this ```/format:list```
           
