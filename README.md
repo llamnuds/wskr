@@ -37,6 +37,7 @@ You must have one, and only one, of these.
 *(But do NOT use = after any of these.)*
 ```
 --file|-f      some-file           Search for a file.
+--dir|-i       some-path           Show the contents of a given directory.
 --userfile|-u  some-path           Show files/folders in a specified folder for all users on all machines.
 --registry|-r  some-reg-value      Search for a registry value.	
 --wmic|-m      some-wmic-command   Run your WMIC your command.
@@ -88,6 +89,12 @@ To search PC00 through PC99, showing the files present for each user on each mac
 ```
 wskr --range-pc00..pc99 --userfile 'AppData\roaming\icaclient'
 ```
+
+To show the contents of a given directory :-
+```
+wskr -n=comp456 --dir 'windows\program files'
+```
+NOTE the lack of a drive letter, C: is assumed.
 
 To search for a REGISTRY Value on a single computer :-
 ```

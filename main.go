@@ -46,7 +46,7 @@ func main() {
 	var argSave string = ""
 	var argTimings bool = false
 
-	// Used letters - 3bdefgmnprstuvwxy / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
+	// Used letters - 3bdefgimnprstuvwxy / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
 
 	if len(os.Args) == 1 {
 		printHelp()
@@ -147,6 +147,10 @@ func main() {
 					argAction = "File"
 				}
 
+				if v3[0] == "--dir" || v3[0] == "-i" {
+					argAction = "Dir"
+				}
+
 				if v3[0] == "--userfile" || v3[0] == "-u" {
 					argAction = "UserFile"
 				}
@@ -235,6 +239,10 @@ func main() {
 	if argAction == "File" {
 		fmt.Print("Will look for this ", strings.ReplaceAll(argItem, "\\\\", "\\"))
 		fmt.Println(" FILE/FOLDER")
+	}
+	if argAction == "Dir" {
+		fmt.Print("Will display a directory of this ", strings.ReplaceAll(argItem, "\\\\", "\\"))
+		fmt.Println(" FOLDER")
 	}
 	if argAction == "UserFile" {
 		fmt.Print("Will look for this ", strings.ReplaceAll(argItem, "\\\\", "\\"))
@@ -447,6 +455,7 @@ func printHelp() {
 	MANDATORY - You must have one, and only one, of these :-
 	(But do NOT use = after any of these.)
 	--file|-f		Search for a file.
+	--dir|-i		Display the contents of a directory.
 	--userfile|-u   Show files in a specified folder for all users.
 	--registry|-r	Search for a registry value.	
 	--ping|-g		Search for LIVE machines.
@@ -484,6 +493,10 @@ func printHelp() {
 
 	To search for a registry Value on a single computer :-
 				wskr -n=comp456 -r 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell'
+
+	To show the contents of a given directory :-
+				wskr -n=comp456 --dir 'windows\program files'
+				NOTE the lack of a drive letter, C: is assumed.
 	
 	To see various things such as :-
 	   Logged in users, saving result:  wskr.exe --range=WS123 --wmic computersystem get username --save='output.txt'
@@ -536,6 +549,9 @@ func performAction(wg *sync.WaitGroup, mu *sync.Mutex, argAction string, pc stri
 
 	if argAction == "File" {
 		go checkFile(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
+	}
+	if argAction == "Dir" {
+		go checkDir(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
 	}
 	if argAction == "UserFile" {
 		go checkUserFile(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
@@ -906,6 +922,38 @@ func checkFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSh
 				maybeSaveToFile("0-"+argSave, pc, strings.Replace(err.Error(), "CreateFile ", "", -1))
 			}
 		}
+	}
+}
+
+// checkDir function will display the contents of a folder on a remote machine.
+func checkDir(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argShowGood bool, argShowBad bool, argSave string) {
+	defer wg.Done()
+	remoteDir := "\\\\" + pc + "\\c$\\" + file
+	userFolders, err := ioutil.ReadDir(remoteDir)
+	if err != nil {
+		mu.Lock()
+		countBad++
+		mu.Unlock()
+		badResult()
+		if !argSummary && argShowBad {
+			print(pc, "Error reading "+remoteDir)
+			maybeSaveToFile("0-"+argSave, pc, "Error reading "+remoteDir)
+		}
+	} else {
+		mu.Lock()
+		countGood++
+		mu.Unlock()
+		goodResult()
+		var result string = ""
+		for _, userFolder := range userFolders {
+			if userFolder.IsDir() {
+				result += fmt.Sprintf("Dir\t%10d bytes\t%s", userFolder.Size(), userFolder.Name()) + "\n"
+			} else {
+				result += fmt.Sprintf("File\t%10d bytes\t%s", userFolder.Size(), userFolder.Name()) + "\n"
+			}
+		}
+		print(pc, result)
+		maybeSaveToFile("0-"+argSave, pc, result)
 	}
 }
 
