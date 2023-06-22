@@ -144,4 +144,4 @@ The following are not allowed in conjunction with --WMIC :-
 6) VBSCRIPT.DLL
 7) SHADOWCOPY
 
-## v0.1 - Copyright 2023 - llamnuds
+## Copyright 2023 - llamnuds
