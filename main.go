@@ -930,6 +930,8 @@ func checkDir(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSho
 	defer wg.Done()
 	remoteDir := "\\\\" + pc + "\\c$\\" + file
 	userFolders, err := ioutil.ReadDir(remoteDir)
+	var dirCount = 0
+	var fileCount = 0
 	if err != nil {
 		mu.Lock()
 		countBad++
@@ -948,10 +950,13 @@ func checkDir(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSho
 		for _, userFolder := range userFolders {
 			if userFolder.IsDir() {
 				result += fmt.Sprintf("Dir\t%10d bytes\t%s", userFolder.Size(), userFolder.Name()) + "\n"
+				dirCount++
 			} else {
 				result += fmt.Sprintf("File\t%10d bytes\t%s", userFolder.Size(), userFolder.Name()) + "\n"
+				fileCount++
 			}
 		}
+		result += fmt.Sprintf("File Count = %d\nDir Count = %d", fileCount, dirCount)
 		print(pc, result)
 		maybeSaveToFile("0-"+argSave, pc, result)
 	}
