@@ -32,7 +32,7 @@ wskr --range=WS000..WS999  --ping
 ```
 
 
-## MANDATORY PARAMETER - Tell WSKr what to do.
+## MANDATORY PARAMETER 1 of 2 - Tell WSKr what to do.
 You must have one, and only one, of these.
 *(But do NOT use = after any of these.)*
 ```
@@ -48,7 +48,7 @@ You must have one, and only one, of these.
 * With ```--wmic```, For an HTML formatted output postfix this ```/format:hform``` ...or for a LIST output use this ```/format:list```
           
           
-## MANDATORY PARAMETER - Tell WSKr on which machines to operate.
+## MANDATORY PARAMETER 2 of 2 - Tell WSKr on which machines to operate.
 You will need to state a RANGE of computers to look at.
 ```
 --range=|-n=   string[..string]    FirstMachine[.. LastMachine]
