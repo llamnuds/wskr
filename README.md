@@ -91,10 +91,10 @@ wskr --range-pc00..pc99 --userfile 'AppData\roaming\icaclient'
 ```
 
 To show the contents of a given directory :-
+*NOTE the lack of a drive letter, C: is assumed.*
 ```
 wskr -n=comp456 --dir 'windows\program files'
 ```
-NOTE the lack of a drive letter, C: is assumed.
 
 To search for a REGISTRY Value on a single computer :-
 ```
