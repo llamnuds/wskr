@@ -958,7 +958,7 @@ func checkDir(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSho
 		}
 		result += fmt.Sprintf("File Count = %d\nDir Count = %d", fileCount, dirCount)
 		print(pc, result)
-		maybeSaveToFile("0-"+argSave, pc, result)
+		maybeSaveToFile("1-"+argSave, pc, result)
 	}
 }
 
