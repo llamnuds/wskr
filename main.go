@@ -929,7 +929,7 @@ func checkFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSh
 func checkDir(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
 	remoteDir := "\\\\" + pc + "\\c$\\" + file
-	userFolders, err := ioutil.ReadDir(remoteDir)
+	entries, err := ioutil.ReadDir(remoteDir)
 	var dirCount = 0
 	var fileCount = 0
 	if err != nil {
@@ -947,12 +947,12 @@ func checkDir(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSho
 		mu.Unlock()
 		goodResult()
 		var result string = ""
-		for _, userFolder := range userFolders {
-			if userFolder.IsDir() {
-				result += fmt.Sprintf("Dir\t%10d bytes\t%s", userFolder.Size(), userFolder.Name()) + "\n"
+		for _, entry := range entries {
+			if entry.IsDir() {
+				result += fmt.Sprintf("%s\tDir\t%10d bytes\t%s", remoteDir+"\\"+entry.Name(), entry.Size(), entry.ModTime()) + "\n"
 				dirCount++
 			} else {
-				result += fmt.Sprintf("File\t%10d bytes\t%s", userFolder.Size(), userFolder.Name()) + "\n"
+				result += fmt.Sprintf("%s\tFile\t%10d bytes\t%s", remoteDir+"\\"+entry.Name(), entry.Size(), entry.ModTime()) + "\n"
 				fileCount++
 			}
 		}
@@ -980,7 +980,7 @@ func checkUserFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile strin
 			if userFolder.IsDir() {
 
 				// Compile the full path to be checked
-				folderToCheck := `c$\users\` + userFolder.Name() + `\` + userfile
+				folderToCheck := `users\` + userFolder.Name() + `\` + userfile
 
 				// Double up the slashes
 				// folderToCheck = strings.ReplaceAll(folderToCheck, `\`, `\\`)
@@ -990,7 +990,8 @@ func checkUserFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile strin
 
 				// Launch it
 				wg2.Add(1)
-				go checkFilePS(wg2, mu, pc, folderToCheck, argShowGood, argShowBad, argSave)
+				//go checkFilePS(wg2, mu, pc, folderToCheck, argShowGood, argShowBad, argSave)
+				go checkDir(wg2, mu, pc, folderToCheck, argShowGood, argShowBad, argSave)
 			}
 		}
 	}
