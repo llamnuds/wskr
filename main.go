@@ -998,6 +998,12 @@ func checkUserFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile strin
 	wg2.Wait()
 }
 
+/*
+
+I think this is no longer used, well that's the plan anyway.
+Using Powershell was far too slow.
+I should remove references in the documentation about requiring Powershell.
+
 // Use PowerShell to check a File's stats (version, last mod etc)
 func checkFilePS(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string) {
 	defer wg.Done()
@@ -1045,6 +1051,7 @@ func checkFilePS(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile string,
 		}
 	}
 }
+*/
 
 /*
 
