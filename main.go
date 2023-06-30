@@ -999,62 +999,6 @@ func checkUserFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile strin
 }
 
 /*
-
-I think this is no longer used, well that's the plan anyway.
-Using Powershell was far too slow.
-I should remove references in the documentation about requiring Powershell.
-
-// Use PowerShell to check a File's stats (version, last mod etc)
-func checkFilePS(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string) {
-	defer wg.Done()
-
-	// Powershell Command to run
-	psCommand := `write-output $(gci "\\` + pc + `\` + userfile + `")`
-
-	// Construct the PowerShell command with the required arguments
-	cmd := exec.Command("powershell", "-Command", psCommand)
-
-	// Execute the command and capture the output
-	output, err := cmd.Output()
-	results := string(output)
-	success := false
-
-	if err == nil {
-		// No err but, blanks are bad too!
-		if results != "" {
-			success = true
-		}
-	}
-
-	if success {
-		mu.Lock()
-		countGood++
-		mu.Unlock()
-		goodResult()
-		if !argSummary && argShowGood {
-			print(pc, userfile+" = "+results)
-			maybeSaveToFile("1-"+argSave, pc, userfile+" = "+results)
-		}
-	} else {
-		mu.Lock()
-		countBad++
-		mu.Unlock()
-		badResult()
-		if !argSummary && argShowBad {
-			if results == "" {
-				print(pc, "Not found.")
-				maybeSaveToFile("0-"+argSave, pc, "Not found.")
-			} else {
-				print(pc, "Error = "+string(err.Error()))
-				maybeSaveToFile("0-"+argSave, pc, "Error = "+string(err.Error()))
-			}
-		}
-	}
-}
-*/
-
-/*
-
 Errors :-
 1  - No ACTION specified.
 2  - No START specified.
