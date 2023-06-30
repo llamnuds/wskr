@@ -1,5 +1,5 @@
 # WSKr
-Do you manage hundreds or thousands of machines?  Then this simple tool could be of use to you.  Just download and run the EXE on your Windows machine. Scan a single machine or thousands in just a few seconds.  It basically fronts calls to Windows PING, REG, POWERSHELL and WMIC executables, but we get the benefit of parrallelism with Go's go-routines.
+Do you manage hundreds or thousands of machines?  Then this simple tool could be of use to you.  Just download and run the EXE on your Windows machine. Scan a single machine or thousands in just a few seconds.  It basically fronts calls to Windows PING, REG and WMIC executables, but we get the benefit of parrallelism with Go's go-routines.
 
 
 ## FEATURES
@@ -124,7 +124,6 @@ The above ranges could be in the machine name range format:
 2) ```--ping``` is reliant on Windows ```PING.EXE```
 3) ```--wmic``` is reliant on Windows ```WMIC.EXE```
 4) ```--registry``` is reliant on Windows ```REG.EXE```
-5) ```--userfile``` is reliant on Windows ```POWERSHELL.EXE```
 
 
 ## ASSUMPTIONS
