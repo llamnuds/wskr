@@ -57,7 +57,7 @@ You will need to state a RANGE of computers to look at.
 
 * The text file must be in the same directory that WSKR.EXE is run from.
 * Each line of the text file should start with a machine name, then a space; everything after the space is ignored.
-* Blank lines are ignored, as are any lines starting with a space or hash symbol.
+* Blank lines are ignored, as are any lines starting with a space, hash symbol or tab.
 
 
 ## OPTIONAL PARAMETERS
