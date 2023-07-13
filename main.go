@@ -470,7 +470,7 @@ func printHelp() {
 	--range=|-n=	'filename.txt'       Name of text file to read in, it should end in .txt.
 					The text file must be in the same directory that WSKR.EXE is run from.
 					Each line of the text file should start with a machine name, then a space; everything after the space is ignored.
-					Blank lines are ignored, as are any lines starting with a space or hash symbol.
+					Blank lines are ignored, as are any lines starting with a space, hash symbol or tab.
 	
 	OPTIONAL :-
 	[--show=|-w=]	String		1,Return successes, 0,Failures.		(-w=10 to show all) *Note.
@@ -647,7 +647,7 @@ func readRangeFromFile(myFile string) []string {
 			// Ignore this blank line
 		} else {
 			// Not a blank line
-			if data[0] == ' ' || data[0] == '#' {
+			if data[0] == ' ' || data[0] == '#' || data[0] == '\t' {
 				// DO NOTHING
 			} else {
 				//  Should be data so split into computername and comment
@@ -768,7 +768,7 @@ func maybeSaveToFile(filename string, pc string, data string) {
 	for _, line := range strings.Split(data, "\n") {
 		datum := strings.TrimSpace(line)
 		if datum != "" {
-			data2 += " " + datum + "\n"
+			data2 += "\t" + datum + "\n"
 		}
 	}
 	if _, err := f.WriteString(data2); err != nil {
@@ -778,13 +778,13 @@ func maybeSaveToFile(filename string, pc string, data string) {
 
 // print function will print the computer name on one line (pc)
 // then the remainder of the information (data) on further lines
-// each indented by one space.
+// each indented by one tab.
 func print(pc string, data string) {
 	var data2 string = strings.TrimSpace(pc) + "\n"
 	for _, line := range strings.Split(data, "\n") {
 		datum := strings.TrimSpace(line)
 		if datum != "" {
-			data2 += " " + datum + "\n"
+			data2 += "\t" + datum + "\n"
 		}
 	}
 	fmt.Println(data2)
