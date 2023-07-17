@@ -38,6 +38,7 @@ func main() {
 	var argShow string = "1"
 	var argShowGood bool = true
 	var argShowBad bool = false
+	var argDebug bool = false
 	var argPad string = "000"
 	var argDelay int = 0
 	var argPrefix string = ""
@@ -46,7 +47,7 @@ func main() {
 	var argSave string = ""
 	var argTimings bool = false
 
-	// Used letters - 3bdefgimnprstuvwxy / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
+	// Used letters - 3abdefgimnprstuvwxy / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
 
 	if len(os.Args) == 1 {
 		printHelp()
@@ -129,6 +130,10 @@ func main() {
 
 				if v3[0] == "--timings" || v3[0] == "-t" {
 					argTimings = true
+				}
+
+				if v3[0] == "--debug" || v3[0] == "-a" {
+					argDebug = true
 				}
 
 				if v3[0] == "--delay" || v3[0] == "-d" {
@@ -333,7 +338,7 @@ func main() {
 	if usingFile {
 		// Iterate through computerList
 		for _, pc := range computerList {
-			performAction(wg, &mu, argAction, pc, argItem, argShowGood, argShowBad, argSave)
+			performAction(wg, &mu, argAction, pc, argItem, argShowGood, argShowBad, argSave, argDebug)
 
 			// Delay before next searcher launched
 			time.Sleep(time.Duration(argDelay) * time.Second)
@@ -347,7 +352,7 @@ func main() {
 			}
 			pc = argPrefix + pc
 			// Perform the action
-			performAction(wg, &mu, argAction, pc, argItem, argShowGood, argShowBad, argSave)
+			performAction(wg, &mu, argAction, pc, argItem, argShowGood, argShowBad, argSave, argDebug)
 
 			// Delay before next searcher launched
 			time.Sleep(time.Duration(argDelay) * time.Second)
@@ -543,7 +548,7 @@ func printHelp() {
 
 // performAction function checks to see which single function is required
 // and executes it.
-func performAction(wg *sync.WaitGroup, mu *sync.Mutex, argAction string, pc string, argItem string, argShowGood bool, argShowBad bool, argSave string) {
+func performAction(wg *sync.WaitGroup, mu *sync.Mutex, argAction string, pc string, argItem string, argShowGood bool, argShowBad bool, argSave string, argDebug bool) {
 
 	wg.Add(1)
 
@@ -560,13 +565,13 @@ func performAction(wg *sync.WaitGroup, mu *sync.Mutex, argAction string, pc stri
 		go checkRegistry(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
 	}
 	if argAction == "Ping" {
-		go checkPing(wg, mu, pc, argShowGood, argShowBad, argSave)
+		go checkPing(wg, mu, pc, argShowGood, argShowBad, argSave, argDebug)
 	}
 	if argAction == "WMIC" {
 		go checkWMI(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
 	}
 	if argAction == "Free" {
-		go checkFree(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
+		go checkFree(wg, mu, pc, argItem, argShowGood, argShowBad, argSave, argDebug)
 	}
 	if argAction == "Bitlocker" {
 		go checkBitlocker(wg, mu, pc, argShowGood, argShowBad, argSave)
@@ -586,10 +591,17 @@ func goodResult() {
 }
 
 // checkFree function checks to see if a device has no active user.
-func checkFree(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argItem string, argShowGood, argShowBad bool, argSave string) {
+func checkFree(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argItem string, argShowGood, argShowBad bool, argSave string, argDebug bool) {
 	defer wg.Done()
 	// Launch an EXE and keep the results
 	out, err := exec.Command("cmd", "/c", "wmic /node:"+pc+" computersystem get username").Output()
+
+	if argDebug {
+		maybeSaveToFile("debug.log", pc, string(out))
+		if err != nil {
+			maybeSaveToFile("debug.log", pc, string(err.Error()))
+		}
+	}
 
 	// Check 'out' to see if this machine really is FREE
 	var isNotFree bool = true
@@ -791,7 +803,7 @@ func print(pc string, data string) {
 }
 
 // checkPing function will see if a machine is alive or not.
-func checkPing(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argShowGood bool, argShowBad bool, argSave string) {
+func checkPing(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argShowGood bool, argShowBad bool, argSave string, argDebug bool) {
 	defer wg.Done()
 
 	var buffer bytes.Buffer
@@ -799,6 +811,10 @@ func checkPing(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argShowGood bool, 
 	cmd.Stdout = &buffer
 	_ = cmd.Run()
 	result := buffer.String()
+
+	if argDebug {
+		maybeSaveToFile("debug.log", pc, result)
+	}
 
 	if len(result) < 100 {
 		// FAILED TO PING
@@ -1011,4 +1027,21 @@ Errors :-
 9  - WMIC call with disallowed option - JSCRIPT.DLL.
 10 - WMIC call with disallowed option - VBSCRIPT.DLL.
 11 - WMIC call with disallowed option - SHADOWCOPY.
+
+
+
+DEBUG - DEBUG - DEBUG
+	DONE - Ping
+	DONE - Free
+	TODO - Bitlocker
+	TODO - Dir
+	TODO - File
+	TODO - Registry
+	TODO - UserFile
+	TODO - WMI
+	TODO - Update Github README
+	TODO - Update In-program Help
+	TODO - Update CHANGELOG File
+	TODO - Update Github Feature Requests
+
 */
