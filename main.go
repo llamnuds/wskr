@@ -832,7 +832,7 @@ func checkPing(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argShowGood bool, 
 		// Something, was returned
 		success := false
 		for _, value := range strings.Split(result, "\n") {
-			if strings.Contains(string(value), "Received = 1") {
+			if strings.Contains(string(value), "(0%") {
 				success = true
 			}
 		}
