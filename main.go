@@ -553,28 +553,28 @@ func performAction(wg *sync.WaitGroup, mu *sync.Mutex, argAction string, pc stri
 	wg.Add(1)
 
 	if argAction == "File" {
-		go checkFile(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
+		go checkFile(wg, mu, pc, argItem, argShowGood, argShowBad, argSave, argDebug)
 	}
 	if argAction == "Dir" {
-		go checkDir(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
+		go checkDir(wg, mu, pc, argItem, argShowGood, argShowBad, argSave, argDebug)
 	}
 	if argAction == "UserFile" {
-		go checkUserFile(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
+		go checkUserFile(wg, mu, pc, argItem, argShowGood, argShowBad, argSave, argDebug)
 	}
 	if argAction == "Registry" {
-		go checkRegistry(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
+		go checkRegistry(wg, mu, pc, argItem, argShowGood, argShowBad, argSave, argDebug)
 	}
 	if argAction == "Ping" {
 		go checkPing(wg, mu, pc, argShowGood, argShowBad, argSave, argDebug)
 	}
 	if argAction == "WMIC" {
-		go checkWMI(wg, mu, pc, argItem, argShowGood, argShowBad, argSave)
+		go checkWMI(wg, mu, pc, argItem, argShowGood, argShowBad, argSave, argDebug)
 	}
 	if argAction == "Free" {
 		go checkFree(wg, mu, pc, argItem, argShowGood, argShowBad, argSave, argDebug)
 	}
 	if argAction == "Bitlocker" {
-		go checkBitlocker(wg, mu, pc, argShowGood, argShowBad, argSave)
+		go checkBitlocker(wg, mu, pc, argShowGood, argShowBad, argSave, argDebug)
 	}
 }
 
@@ -700,11 +700,14 @@ func splitMachineName(a string) (string, int, string) {
 }
 
 // checkWMI function performs some user requested WMI check on a remote machine
-func checkWMI(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argItem string, argShowGood bool, argShowBad bool, argSave string) {
+func checkWMI(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argItem string, argShowGood bool, argShowBad bool, argSave string, argDebug bool) {
 	defer wg.Done()
 	// Launch an EXE and keep the results
 	out, err := exec.Command("cmd", "/c", "wmic /node:"+pc+" "+argItem).Output()
 	if err != nil {
+		if argDebug {
+			maybeSaveToFile("debug.log", pc, err.Error())
+		}
 		if !argSummary {
 			if argShowBad {
 				print(pc, err.Error())
@@ -716,6 +719,9 @@ func checkWMI(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argItem string, arg
 		mu.Unlock()
 		badResult()
 	} else {
+		if argDebug {
+			maybeSaveToFile("debug.log", pc, string(out))
+		}
 		if !argSummary {
 			if argShowGood {
 				print(pc, string(out))
@@ -730,7 +736,7 @@ func checkWMI(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argItem string, arg
 }
 
 // checkBitlocker function tries to read Bitlocker Recovery-ID key on a remote machine
-func checkBitlocker(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argShowGood bool, argShowBad bool, argSave string) {
+func checkBitlocker(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argShowGood bool, argShowBad bool, argSave string, argDebug bool) {
 	defer wg.Done()
 	// Launch an EXE and keep the results
 
@@ -739,6 +745,10 @@ func checkBitlocker(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argShowGood b
 
 	// Construct the PowerShell command with the required arguments
 	out, err := exec.Command("powershell", "-Command", psCommand).Output()
+
+	if argDebug {
+		maybeSaveToFile("debug.log", pc, err.Error())
+	}
 
 	if (err != nil) || (len(string(out)) < 55) {
 		if !argSummary {
@@ -865,7 +875,7 @@ func checkPing(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argShowGood bool, 
 }
 
 // getRegData function will attempt to get a registry value from a remote computer's registry.
-func getRegData(pc, key, value string, argShowGood bool, argShowBad bool, argSave string) {
+func getRegData(pc, key, value string, argShowGood bool, argShowBad bool, argSave string, argDebug bool) {
 
 	// Launch an EXE and keep the results
 	var buffer bytes.Buffer
@@ -884,6 +894,10 @@ func getRegData(pc, key, value string, argShowGood bool, argShowBad bool, argSav
 			if !argSummary {
 				print(pc, buffer.String())
 				maybeSaveToFile("0-"+argSave, pc, buffer.String())
+
+				if argDebug {
+					maybeSaveToFile("debug.log", pc, buffer.String())
+				}
 			}
 		}
 	} else {
@@ -897,23 +911,26 @@ func getRegData(pc, key, value string, argShowGood bool, argShowBad bool, argSav
 			if !argSummary {
 				print(pc, buffer.String())
 				maybeSaveToFile("1-"+argSave, pc, buffer.String())
+				if argDebug {
+					maybeSaveToFile("debug.log", pc, buffer.String())
+				}
 			}
 		}
 	}
 }
 
 // checkRegistry function will attempt to get a registry value from a remote computer's registry.
-func checkRegistry(wg *sync.WaitGroup, mu *sync.Mutex, pc string, registry string, argShowGood bool, argShowBad bool, argSave string) {
+func checkRegistry(wg *sync.WaitGroup, mu *sync.Mutex, pc string, registry string, argShowGood bool, argShowBad bool, argSave string, argDebug bool) {
 	defer wg.Done()
 	registrySplit := strings.Split(registry, `\`)
 	regSplitLengthMinusOne := len(registrySplit) - 1
 	regKey := strings.Join(registrySplit[:regSplitLengthMinusOne], `\`) // all up till the last word
 	regValue := registrySplit[regSplitLengthMinusOne]                   // the last word
-	getRegData(pc, regKey, regValue, argShowGood, argShowBad, argSave)
+	getRegData(pc, regKey, regValue, argShowGood, argShowBad, argSave, argDebug)
 }
 
 // checkFile function will check the existence of a file or folder on a remote machine.
-func checkFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argShowGood bool, argShowBad bool, argSave string) {
+func checkFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argShowGood bool, argShowBad bool, argSave string, argDebug bool) {
 	defer wg.Done()
 	searchForThis := "\\\\" + pc + "\\" + file
 	if fileStat, err := os.Stat(searchForThis); err == nil {
@@ -921,6 +938,7 @@ func checkFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSh
 		countGood++
 		mu.Unlock()
 		goodResult()
+
 		if argShowGood {
 			if !argSummary {
 				print(pc, searchForThis+" , "+fileStat.ModTime().Format(time.UnixDate))
@@ -932,6 +950,11 @@ func checkFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSh
 		countBad++
 		mu.Unlock()
 		badResult()
+
+		if argDebug {
+			maybeSaveToFile("debug.log", pc, err.Error())
+		}
+
 		if argShowBad {
 			if !argSummary {
 				print(pc, strings.Replace(err.Error(), "CreateFile ", "", -1))
@@ -942,10 +965,15 @@ func checkFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSh
 }
 
 // checkDir function will display the contents of a folder on a remote machine.
-func checkDir(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argShowGood bool, argShowBad bool, argSave string) {
+func checkDir(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argShowGood bool, argShowBad bool, argSave string, argDebug bool) {
 	defer wg.Done()
 	remoteDir := "\\\\" + pc + "\\c$\\" + file
 	entries, err := ioutil.ReadDir(remoteDir)
+
+	if argDebug && err != nil {
+		maybeSaveToFile("debug.log", pc, err.Error())
+	}
+
 	var dirCount = 0
 	var fileCount = 0
 	if err != nil {
@@ -979,7 +1007,7 @@ func checkDir(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSho
 }
 
 // checkUserFile function will check the existence of a file or folder on a remote machine, in the USER folders.
-func checkUserFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string) {
+func checkUserFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile string, argShowGood bool, argShowBad bool, argSave string, argDebug bool) {
 	defer wg.Done()
 	wg2 := new(sync.WaitGroup)
 	// Determine user folders on this machine
@@ -1007,7 +1035,7 @@ func checkUserFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile strin
 				// Launch it
 				wg2.Add(1)
 				//go checkFilePS(wg2, mu, pc, folderToCheck, argShowGood, argShowBad, argSave)
-				go checkDir(wg2, mu, pc, folderToCheck, argShowGood, argShowBad, argSave)
+				go checkDir(wg2, mu, pc, folderToCheck, argShowGood, argShowBad, argSave, argDebug)
 			}
 		}
 	}

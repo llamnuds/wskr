@@ -3,7 +3,7 @@
         - 13/7/2023 - Changed output indentation from a space to a Tab.
         - 17/7/2023 - Added --debug option for PING and FREE.
         - 18/7/2023 - Changed PING success detection to work in any language.
-        -
+        - 19/7/2023 - Added --debug option for all other tests.
         -
 0.1.2   - The future!
 
