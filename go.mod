@@ -1,4 +1,4 @@
-module main.go
+module wskr
 
 go 1.19
 

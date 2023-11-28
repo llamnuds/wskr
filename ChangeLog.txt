@@ -5,5 +5,5 @@
         - 18/7/2023 - Changed PING success detection to work in any language.
         - 19/7/2023 - Added --debug option for all other tests.
         -
-0.1.2   - The future!
+0.1.2   - 27/11/2023 - Changed method to get Files and Folders in --DIR command b/c original method deprecated.
 

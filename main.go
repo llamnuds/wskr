@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -485,7 +484,7 @@ func printHelp() {
 	[--timings|-t]              Display the timings of the results coming back.
 	[--help|-?]					This help page.
 
-	*Note :- Finding something may be more meaningful that NOT being able to find something.
+	*Note :- Finding something may be more meaningful than NOT being able to find something.
 				Because you may be prevented from finding things for multiple reasons,
 				e.g. rights, firewalls, remote services off etc.
 	
@@ -500,8 +499,7 @@ func printHelp() {
 				wskr -n=comp456 -r 'HKLM\SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon\Shell'
 
 	To show the contents of a given directory :-
-				wskr -n=comp456 --dir 'windows\program files'
-				NOTE the lack of a drive letter, C: is assumed.
+				wskr -n=comp456 --dir 'c:\windows\program files'
 	
 	To see various things such as :-
 	   Logged in users, saving result:  wskr.exe --range=WS123 --wmic computersystem get username --save='output.txt'
@@ -967,8 +965,9 @@ func checkFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSh
 // checkDir function will display the contents of a folder on a remote machine.
 func checkDir(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argShowGood bool, argShowBad bool, argSave string, argDebug bool) {
 	defer wg.Done()
-	remoteDir := "\\\\" + pc + "\\c$\\" + file
-	entries, err := ioutil.ReadDir(remoteDir)
+	file = strings.Replace(file, ":", "$", -1)
+	remoteDir := "\\\\" + pc + "\\" + file
+	entries, err := os.ReadDir(remoteDir)
 
 	if argDebug && err != nil {
 		maybeSaveToFile("debug.log", pc, err.Error())
@@ -993,10 +992,19 @@ func checkDir(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSho
 		var result string = ""
 		for _, entry := range entries {
 			if entry.IsDir() {
-				result += fmt.Sprintf("%s\tDir\t%10d bytes\t%s", remoteDir+"\\"+entry.Name(), entry.Size(), entry.ModTime()) + "\n"
+				info, err := entry.Info()
+				if err != nil {
+					continue
+				}
+				result += fmt.Sprintf("%s\tDir\t%10d bytes\t%s", remoteDir+"\\"+entry.Name(), info.Size(), info.ModTime()) + "\n"
 				dirCount++
 			} else {
-				result += fmt.Sprintf("%s\tFile\t%10d bytes\t%s", remoteDir+"\\"+entry.Name(), entry.Size(), entry.ModTime()) + "\n"
+				info, err := entry.Info()
+				if err != nil {
+					// handle the error, perhaps continue to the next entry
+					continue
+				}
+				result += fmt.Sprintf("%s\tFile\t%10d bytes\t%s", remoteDir+"\\"+entry.Name(), info.Size(), info.ModTime()) + "\n"
 				fileCount++
 			}
 		}
@@ -1012,7 +1020,7 @@ func checkUserFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile strin
 	wg2 := new(sync.WaitGroup)
 	// Determine user folders on this machine
 	remoteDir := "\\\\" + pc + "\\c$\\users\\"
-	userFolders, err := ioutil.ReadDir(remoteDir)
+	userFolders, err := os.ReadDir(remoteDir)
 	if err != nil {
 		if !argSummary && argShowBad {
 			print(pc, "Error reading "+remoteDir)
