@@ -932,6 +932,7 @@ func checkRegistry(wg *sync.WaitGroup, mu *sync.Mutex, pc string, registry strin
 func checkFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argShowGood bool, argShowBad bool, argSave string, argDebug bool) {
 	defer wg.Done()
 	searchForThis := "\\\\" + pc + "\\" + file
+	// print("checkFile : "+pc, searchForThis)
 	if fileStat, err := os.Stat(searchForThis); err == nil {
 		mu.Lock()
 		countGood++
@@ -968,6 +969,7 @@ func checkDir(wg *sync.WaitGroup, mu *sync.Mutex, pc string, file string, argSho
 	defer wg.Done()
 	file = strings.Replace(file, ":", "$", -1)
 	remoteDir := "\\\\" + pc + "\\" + file
+	// print("checkDir : "+pc, remoteDir)
 	entries, err := os.ReadDir(remoteDir)
 
 	if argDebug && err != nil {
@@ -1033,7 +1035,7 @@ func checkUserFile(wg *sync.WaitGroup, mu *sync.Mutex, pc string, userfile strin
 			if userFolder.IsDir() {
 
 				// Compile the full path to be checked
-				folderToCheck := `users\` + userFolder.Name() + `\` + userfile
+				folderToCheck := `c:\users\` + userFolder.Name() + `\` + userfile
 
 				// Double up the slashes
 				// folderToCheck = strings.ReplaceAll(folderToCheck, `\`, `\\`)

@@ -110,6 +110,7 @@ Installed printers:              wskr.exe --range=WS123 --wmic printerconfig lis
 The IP,DHCPserver, Gateway:      wskr.exe --range=WS123 --wmic nicconfig get IPAddress,dhcpserver,defaultipgateway
 AssetTag (not the SerialNumber): wskr.exe --range=WS123 --wmic systemenclosure get SMBIOSAssetTag
 HTML for all COMPUTERSYSTEM:     wskr.exe --range=WS123 --wmic computersystem get /format:hform --save='cs-output.html'
+EFS running as a service:        wskr.exe --range=ws123 --wmic service "where name='efs'" get Started
 ```
 
 The above ranges could be in the machine name range format:
