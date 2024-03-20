@@ -510,6 +510,7 @@ func printHelp() {
 	   The some IP related stuff:       wskr.exe --range=WS123 --wmic nicconfig get ipaddress,defaultipgateway,dhcpserver,dnsdomainsuffixsearchorder
 	   AssetTag (not the SerialNumber): wskr.exe --range=WS123 --wmic systemenclosure get SMBIOSAssetTag
 	   HTML for all COMPUTERSYSTEM:     wskr.exe --range=WS123 --wmic computersystem get /format:hform --save='cs-output.html'
+	   EFS running as a service:        wskr.exe --range=ws123 --wmic service "where name='efs'" get Started
 	
 	Oviously the above ranges could be in the :-
 		* Multiple machine format: --range=SSnnn..SSmmm
