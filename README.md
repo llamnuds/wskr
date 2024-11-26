@@ -67,6 +67,7 @@ You will need to state a RANGE of computers to look at.
 [--save=|-v=]     'String'  File name, to save in same location as EXE.   Use single quotes.
 [--summary|-y]              Just give final counts.
 [--timings|-t]              Display the timings of the results that come back.
+[--confirm|-c]              Confirm in advance that your parameters are good, i.e. skip the "Press Y" prompt.
 [--help|-?]                 Show a help page.
 ```
 
