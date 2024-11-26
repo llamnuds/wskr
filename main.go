@@ -44,9 +44,10 @@ func main() {
 	var argAction string = "Nothing"
 	var argItem string = ""
 	var argSave string = ""
+	var argConfirm bool = false
 	var argTimings bool = false
 
-	// Used letters - 3abdefgimnprstuvwxy / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
+	// Used letters - 3abcdefgimnprstuvwxy / / / / / / / / / / / / / / / / / / / / / / / / / / / / /
 
 	if len(os.Args) == 1 {
 		printHelp()
@@ -109,6 +110,10 @@ func main() {
 
 				if v3[0] == "--start" || v3[0] == "-s" {
 					argStart, _ = strconv.Atoi(v3[1])
+				}
+
+				if v3[0] == "--confirm" || v3[0] == "-c" {
+					argConfirm = true
 				}
 
 				if v3[0] == "--end" || v3[0] == "-e" {
@@ -277,11 +282,13 @@ func main() {
 		os.Exit(4)
 	}
 
-	fmt.Println("Type Y to continue :-")
-	var dummy string
-	fmt.Scan(&dummy)
-	if strings.ToUpper(dummy) != "Y" {
-		os.Exit(0)
+	if !argConfirm {
+		fmt.Println("Type Y to continue :-")
+		var dummy string
+		fmt.Scan(&dummy)
+		if strings.ToUpper(dummy) != "Y" {
+			os.Exit(0)
+		}
 	}
 	fmt.Println()
 
