@@ -86,6 +86,10 @@ func main() {
 							// Get the list of Names from the file
 							fileOfCompNames = argRange[0]
 							computerList = readRangeFromFile(fileOfCompNames)
+							if len(computerList) == 0 {
+								fmt.Println("No computer names found in", fileOfCompNames)
+								os.Exit(12)
+							}
 						} else {
 							// This is NOT a filename so extract the single machine name.
 							argPrefix, argStart, argPad = splitMachineName(argRange[0])
@@ -656,6 +660,7 @@ func readRangeFromFile(myFile string) []string {
 	file, err := os.Open(myFile)
 	if err != nil {
 		fmt.Println(err)
+		return []string{}
 	}
 	defer file.Close()
 	scanner := bufio.NewScanner(file)
