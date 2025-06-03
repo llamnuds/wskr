@@ -789,6 +789,7 @@ func maybeSaveToFile(filename string, pc string, data string) {
 	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		log.Println(err)
+		return
 	}
 	defer f.Close()
 
