@@ -758,7 +758,11 @@ func checkBitlocker(wg *sync.WaitGroup, mu *sync.Mutex, pc string, argShowGood b
 	out, err := exec.Command("powershell", "-Command", psCommand).Output()
 
 	if argDebug {
-		maybeSaveToFile("debug.log", pc, err.Error())
+		if err != nil {
+			maybeSaveToFile("debug.log", pc, err.Error())
+		} else {
+			maybeSaveToFile("debug.log", pc, string(out))
+		}
 	}
 
 	if (err != nil) || (len(string(out)) < 55) {
