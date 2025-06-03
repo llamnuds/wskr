@@ -62,6 +62,10 @@ func main() {
 				// Let's see what it is and set values appropriately
 
 				if v3[0] == "--range" || v3[0] == "-n" {
+					if len(v3) <= 1 {
+						fmt.Println("Usage error: --range requires a value")
+						os.Exit(12)
+					}
 					// split on "-" into start and end args
 					argRange := strings.Split(v3[1], "..")
 					switch len(argRange) {
@@ -113,6 +117,10 @@ func main() {
 				}
 
 				if v3[0] == "--start" || v3[0] == "-s" {
+					if len(v3) <= 1 {
+						fmt.Println("Usage error: --start requires a value")
+						os.Exit(12)
+					}
 					argStart, _ = strconv.Atoi(v3[1])
 				}
 
@@ -121,6 +129,10 @@ func main() {
 				}
 
 				if v3[0] == "--end" || v3[0] == "-e" {
+					if len(v3) <= 1 {
+						fmt.Println("Usage error: --end requires a value")
+						os.Exit(12)
+					}
 					argEnd, _ = strconv.Atoi(v3[1])
 				}
 
@@ -129,10 +141,18 @@ func main() {
 				}
 
 				if v3[0] == "--prefix" || v3[0] == "-x" {
+					if len(v3) <= 1 {
+						fmt.Println("Usage error: --prefix requires a value")
+						os.Exit(12)
+					}
 					argPrefix = v3[1]
 				}
 
 				if v3[0] == "--show" || v3[0] == "-w" {
+					if len(v3) <= 1 {
+						fmt.Println("Usage error: --show requires a value")
+						os.Exit(12)
+					}
 					argShow = v3[1]
 				}
 
@@ -145,10 +165,18 @@ func main() {
 				}
 
 				if v3[0] == "--delay" || v3[0] == "-d" {
+					if len(v3) <= 1 {
+						fmt.Println("Usage error: --delay requires a value")
+						os.Exit(12)
+					}
 					argDelay, _ = strconv.Atoi(v3[1])
 				}
 
 				if v3[0] == "--pad" || v3[0] == "-p" {
+					if len(v3) <= 1 {
+						fmt.Println("Usage error: --pad requires a value")
+						os.Exit(12)
+					}
 					argPad = v3[1]
 				}
 
@@ -185,6 +213,10 @@ func main() {
 				}
 
 				if v3[0] == "--save" || v3[0] == "-v" {
+					if len(v3) <= 1 {
+						fmt.Println("Usage error: --save requires a value")
+						os.Exit(12)
+					}
 					argSave = v3[1]
 				}
 
